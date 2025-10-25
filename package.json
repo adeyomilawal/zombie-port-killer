@@ -5,12 +5,12 @@
   "main": "dist/cli.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/zombie-port-killer.git"
+    "url": "https://github.com/adeyomilawal/zombie-port-killer.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/zombie-port-killer/issues"
+    "url": "https://github.com/adeyomilawal/zombie-port-killer/issues"
   },
-  "homepage": "https://github.com/your-username/zombie-port-killer#readme",
+  "homepage": "https://github.com/adeyomilawal/zombie-port-killer#readme",
   "bin": {
     "zkill": "dist/cli.js",
     "zombie-kill": "dist/cli.js"
