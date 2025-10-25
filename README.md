@@ -20,6 +20,7 @@ Error: Port 3000 is already in use
 ```
 
 Then you:
+
 1. Google "kill port process macos" (for the 100th time)
 2. Copy-paste `lsof -ti :3000 | xargs kill -9`
 3. Hope it works
@@ -84,6 +85,7 @@ zkill 3000
 ```
 
 **Output:**
+
 ```
 ✔ Port 3000 is in use
 
@@ -115,6 +117,7 @@ zkill scan
 ```
 
 **Output:**
+
 ```
 📊 Active Ports (3 found):
 
@@ -141,6 +144,7 @@ zkill list
 ```
 
 **Output:**
+
 ```
 📋 Port Mappings (3 configured):
 
@@ -171,6 +175,7 @@ zkill auto enable
 ```
 
 **What happens:**
+
 - When you `cd` into a new project
 - `zkill` detects ports from previous projects
 - Asks if you want to kill them
@@ -224,6 +229,7 @@ zkill info
 ```
 
 **Output:**
+
 ```
 ⚙️  System Information:
 
@@ -292,24 +298,24 @@ zkill 3000
 
 ### Main Commands
 
-| Command | Description |
-|---------|-------------|
-| `zkill <port>` | Kill process on specific port |
-| `zkill scan` | List all active ports |
-| `zkill list` | Show port-to-project mappings |
-| `zkill info` | Show system and project info |
-| `zkill auto enable` | Enable auto-kill |
-| `zkill auto disable` | Disable auto-kill |
-| `zkill auto check` | Check and kill zombie processes |
-| `zkill auto status` | Show auto-kill status |
+| Command              | Description                     |
+| -------------------- | ------------------------------- |
+| `zkill <port>`       | Kill process on specific port   |
+| `zkill scan`         | List all active ports           |
+| `zkill list`         | Show port-to-project mappings   |
+| `zkill info`         | Show system and project info    |
+| `zkill auto enable`  | Enable auto-kill                |
+| `zkill auto disable` | Disable auto-kill               |
+| `zkill auto check`   | Check and kill zombie processes |
+| `zkill auto status`  | Show auto-kill status           |
 
 ### Options
 
-| Option | Description |
-|--------|-------------|
-| `-f, --force` | Kill without confirmation |
-| `-h, --help` | Show help |
-| `-V, --version` | Show version |
+| Option          | Description               |
+| --------------- | ------------------------- |
+| `-f, --force`   | Kill without confirmation |
+| `-h, --help`    | Show help                 |
+| `-V, --version` | Show version              |
 
 ---
 
@@ -510,6 +516,7 @@ A: Only for system processes. Regular development servers don't need it.
 
 **Q: Can I use it in CI/CD?**
 A: Yes! Use `--force` flag to skip confirmation:
+
 ```bash
 zkill 3000 --force
 ```
@@ -522,21 +529,10 @@ A: No. Zero telemetry. Everything runs locally.
 ## Roadmap
 
 ### v1.1 (Next Release)
+
 - [ ] Kill multiple ports: `zkill 3000 8000 5432`
 - [ ] Kill by process name: `zkill --name node`
 - [ ] Kill port range: `zkill --range 3000-3010`
-
-### v1.2 (Future)
-- [ ] VS Code extension
-- [ ] GUI for macOS/Windows
-- [ ] Docker integration
-- [ ] Integration with package.json scripts
-
-### v2.0 (Long-term)
-- [ ] Team collaboration features
-- [ ] Cloud sync
-- [ ] Analytics dashboard
-- [ ] API access
 
 ---
 
@@ -548,7 +544,7 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon).
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/zombie-port-killer.git
+git clone https://github.com/adeyomilawal/zombie-port-killer.git
 cd zombie-port-killer
 
 # Install dependencies
@@ -580,8 +576,8 @@ MIT License - see [LICENSE](LICENSE) file.
 
 ## Support
 
-- 🐛 **Bug reports:** [GitHub Issues](https://github.com/yourusername/zombie-port-killer/issues)
-- 💡 **Feature requests:** [GitHub Discussions](https://github.com/yourusername/zombie-port-killer/discussions)
+- 🐛 **Bug reports:** [GitHub Issues](https://github.com/adeyomilawal/zombie-port-killer/issues)
+- 💡 **Feature requests:** [GitHub Discussions](https://github.com/adeyomilawal/zombie-port-killer/discussions)
 - 📧 **Email:** support@example.com
 - 💬 **Discord:** [Join our community](https://discord.gg/zkill)
 
@@ -590,6 +586,7 @@ MIT License - see [LICENSE](LICENSE) file.
 ## Acknowledgments
 
 Built with:
+
 - [Commander.js](https://github.com/tj/commander.js) - CLI framework
 - [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) - Interactive prompts
 - [Chalk](https://github.com/chalk/chalk) - Terminal colors
@@ -601,9 +598,9 @@ Inspired by the hundreds of Stack Overflow answers about killing port processes.
 
 ## Author
 
-Made with ❤️ by [Your Name](https://github.com/yourusername)
+Made with ❤️ by [Adeyomi Lawal](https://github.com/adeyomilawal)
 
-If zkill saves you time, [consider sponsoring](https://github.com/sponsors/yourusername) ☕
+If zkill saves you time, [consider sponsoring](https://github.com/sponsors/adeyomilawal) ☕
 
 ---
 
@@ -612,5 +609,5 @@ If zkill saves you time, [consider sponsoring](https://github.com/sponsors/youru
 </p>
 
 <p align="center">
-  <a href="https://github.com/yourusername/zombie-port-killer">⭐ Star on GitHub</a>
+  <a href="https://github.com/adeyomilawal/zombie-port-killer">⭐ Star on GitHub</a>
 </p>
