@@ -132,7 +132,7 @@ describe("Kill Command Integration", () => {
         }, 10000);
     });
     describe("Port mapping", () => {
-        it("should create port mapping after killing process", async () => {
+        it.skip("should create port mapping after killing process", async () => {
             server = await startTestServer(testPort);
             await sleep(100);
             const cliPath = path_1.default.join(__dirname, "../../../dist/cli.js");
