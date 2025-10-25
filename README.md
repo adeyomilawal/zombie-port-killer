@@ -1,5 +1,10 @@
 # 🧟 Zombie Port Killer (zkill)
 
+[![npm version](https://badge.fury.io/js/zombie-port-killer.svg)](https://www.npmjs.com/package/zombie-port-killer)
+[![npm downloads](https://img.shields.io/npm/dm/zombie-port-killer.svg)](https://www.npmjs.com/package/zombie-port-killer)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/adeyomilawal/zombie-port-killer.svg?style=social&label=Star)](https://github.com/adeyomilawal/zombie-port-killer)
+
 **Kill zombie processes blocking your ports - instantly.**
 
 Stop Googling "how to kill port process" every single day. `zkill` does it in one command, across all platforms.
