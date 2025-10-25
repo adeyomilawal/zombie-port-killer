@@ -85,13 +85,6 @@ The first public release of Zombie Port Killer (zkill) - the cross-platform CLI 
 - Docker container integration
 - Improved Windows performance
 
-### Planned for v2.0 (Pro Tier)
-
-- Team collaboration features
-- Cloud configuration sync
-- Advanced analytics
-- Priority support
-
 ---
 
 ## Release Notes
