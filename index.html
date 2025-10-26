@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zkill - Kill zombie processes blocking your ports</title>
+    <meta name="description" content="Stop Googling 'how to kill port process'. zkill does it in one command, across all platforms.">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="zkill - Kill zombie processes instantly">
+    <meta property="og:description" content="Cross-platform CLI tool to kill processes by port number. One command. All platforms.">
+    <meta property="og:image" content="https://adeyomilawal.github.io/zombie-port-killer/og-image.png">
+    <meta property="og:url" content="https://adeyomilawal.github.io/zombie-port-killer/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧟</text></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        code, pre {
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .terminal {
+            background: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .terminal-header {
+            background: #323232;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            color: #d4d4d4;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 2s steps(20, end);
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            margin: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <div class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h1 class="text-6xl font-bold mb-4">🧟 zkill</h1>
+                <p class="text-2xl mb-2 font-light">Kill zombie processes blocking your ports - instantly.</p>
+                <p class="text-xl opacity-90">Stop Googling "how to kill port process" every single day.</p>
+            </div>
+
+            <!-- Badges -->
+            <div class="text-center mb-12">
+                <a href="https://www.npmjs.com/package/zombie-port-killer" class="badge">
+                    <img src="https://badge.fury.io/js/zombie-port-killer.svg" alt="npm version">
+                </a>
+                <a href="https://www.npmjs.com/package/zombie-port-killer" class="badge">
+                    <img src="https://img.shields.io/npm/dm/zombie-port-killer.svg" alt="npm downloads">
+                </a>
+                <a href="https://opensource.org/licenses/MIT" class="badge">
+                    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+                </a>
+                <a href="https://github.com/adeyomilawal/zombie-port-killer" class="badge">
+                    <img src="https://img.shields.io/github/stars/adeyomilawal/zombie-port-killer.svg?style=social&label=Star" alt="GitHub stars">
+                </a>
+            </div>
+
+            <!-- Terminal Demo -->
+            <div class="max-w-3xl mx-auto terminal fade-in">
+                <div class="terminal-header">
+                    <div class="terminal-dot bg-red-500"></div>
+                    <div class="terminal-dot bg-yellow-500"></div>
+                    <div class="terminal-dot bg-green-500"></div>
+                </div>
+                <div class="terminal-body">
+                    <div class="mb-4">
+                        <span class="text-green-400">$</span> <span class="text-white">zkill 3000</span>
+                    </div>
+                    <div class="mb-2 text-green-400">✔ Port 3000 is in use</div>
+                    <div class="mb-2">
+                        <div class="text-gray-400">Process Details:</div>
+                        <div class="ml-4">
+                            <div><span class="text-gray-500">Process:</span>  node</div>
+                            <div><span class="text-gray-500">PID:</span>      12345</div>
+                            <div><span class="text-gray-500">Command:</span>  /usr/local/bin/node server.js</div>
+                            <div><span class="text-gray-500">User:</span>     developer</div>
+                        </div>
+                    </div>
+                    <div class="mb-2 text-yellow-400">? Are you sure you want to kill process 12345? (y/N) y</div>
+                    <div class="mb-2 text-green-400">✔ Process 12345 terminated successfully</div>
+                    <div class="text-white">Port 3000 is now available.</div>
+                    <div class="mt-4">
+                        <span class="text-green-400">$</span> <span class="text-white opacity-60 animate-pulse">_</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="text-center mt-12">
+                <div class="inline-block bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-1 mb-4">
+                    <code class="text-white px-4 py-2 block">npm install -g zombie-port-killer</code>
+                </div>
+                <div class="flex justify-center gap-4 mt-6">
+                    <a href="https://github.com/adeyomilawal/zombie-port-killer"
+                       class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                        View on GitHub
+                    </a>
+                    <a href="https://www.npmjs.com/package/zombie-port-killer"
+                       class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+                        npm Package
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Why zkill?</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+                Every developer faces port conflicts. We built zkill to solve this once and for all.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Feature 1 -->
+                <div class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">One Command</h3>
+                    <p class="text-gray-600">
+                        Instead of memorizing different commands for each OS, just run <code class="bg-gray-100 px-2 py-1 rounded">zkill 3000</code>
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="text-4xl mb-4">🌍</div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Cross-Platform</h3>
+                    <p class="text-gray-600">
+                        Works identically on macOS, Linux, and Windows. No more platform-specific commands.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="text-4xl mb-4">🔒</div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Safe Mode</h3>
+                    <p class="text-gray-600">
+                        Asks for confirmation before killing. Warns about system processes. You're always in control.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="text-4xl mb-4">🧠</div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Project Aware</h3>
+                    <p class="text-gray-600">
+                        Remembers which ports belong to which projects. Automatically cleans up when you switch.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Fast</h3>
+                    <p class="text-gray-600">
+                        Less than 100ms to detect and kill processes. Pure TypeScript with zero external dependencies.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Beautiful CLI</h3>
+                    <p class="text-gray-600">
+                        Color-coded output, loading spinners, and clear messages. A joy to use.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Installation Section -->
+    <div class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Quick Start</h2>
+
+                <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Installation</h3>
+                    <div class="bg-gray-900 text-white p-4 rounded-lg mb-4">
+                        <code class="text-green-400">npm install -g zombie-port-killer</code>
+                    </div>
+                    <p class="text-gray-600">Or use yarn or pnpm:</p>
+                    <div class="bg-gray-900 text-white p-4 rounded-lg mt-2">
+                        <code class="text-green-400">yarn global add zombie-port-killer</code><br>
+                        <code class="text-green-400">pnpm add -g zombie-port-killer</code>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Usage</h3>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Kill a process on a specific port:</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill 3000</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Kill without confirmation:</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill 3000 --force</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">List all active ports:</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill scan</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Show system information:</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill info</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Before/After Comparison -->
+    <div class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Before vs After</h2>
+
+            <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+                <!-- Before -->
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-red-800">😰 Before zkill</h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-white p-3 rounded border border-red-200">
+                            <div class="text-gray-600 mb-1">macOS:</div>
+                            <code class="text-xs text-red-700">lsof -ti :3000 | xargs kill -9</code>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-red-200">
+                            <div class="text-gray-600 mb-1">Linux:</div>
+                            <code class="text-xs text-red-700">sudo ss -lptn 'sport = :3000' | grep -oP '(?&lt;=pid=)\d+' | xargs sudo kill -9</code>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-red-200">
+                            <div class="text-gray-600 mb-1">Windows:</div>
+                            <code class="text-xs text-red-700">FOR /F "tokens=5" %P IN ('netstat -ano ^| findstr :3000') DO TaskKill /PID %P /F</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- After -->
+                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-green-800">✨ With zkill</h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-white p-3 rounded border border-green-200">
+                            <div class="text-gray-600 mb-1">macOS:</div>
+                            <code class="text-xs text-green-700">zkill 3000</code>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-green-200">
+                            <div class="text-gray-600 mb-1">Linux:</div>
+                            <code class="text-xs text-green-700">zkill 3000</code>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-green-200">
+                            <div class="text-gray-600 mb-1">Windows:</div>
+                            <code class="text-xs text-green-700">zkill 3000</code>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="text-2xl">🎉</span>
+                        <p class="text-sm text-green-700 font-semibold">One command. All platforms.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to kill some zombies? 🧟</h2>
+            <p class="text-xl mb-8 opacity-90">Join developers worldwide who've stopped Googling port commands.</p>
+
+            <div class="inline-block bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-1 mb-6">
+                <code class="text-white px-6 py-3 text-lg block">npm install -g zombie-port-killer</code>
+            </div>
+
+            <div class="flex justify-center gap-4 mt-8">
+                <a href="https://github.com/adeyomilawal/zombie-port-killer"
+                   class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition inline-flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+                <a href="https://www.npmjs.com/package/zombie-port-killer"
+                   class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+                    npm Package
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">🧟 zkill</h3>
+                    <p class="text-gray-400">Kill zombie processes blocking your ports - instantly.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://github.com/adeyomilawal/zombie-port-killer" class="hover:text-white transition">GitHub</a></li>
+                        <li><a href="https://www.npmjs.com/package/zombie-port-killer" class="hover:text-white transition">npm Package</a></li>
+                        <li><a href="https://github.com/adeyomilawal/zombie-port-killer/issues" class="hover:text-white transition">Report Issues</a></li>
+                        <li><a href="https://github.com/adeyomilawal/zombie-port-killer/blob/main/CONTRIBUTING.md" class="hover:text-white transition">Contributing</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://github.com/adeyomilawal/zombie-port-killer#readme" class="hover:text-white transition">Documentation</a></li>
+                        <li><a href="https://github.com/adeyomilawal/zombie-port-killer/blob/main/CHANGELOG.md" class="hover:text-white transition">Changelog</a></li>
+                        <li><a href="https://github.com/adeyomilawal/zombie-port-killer/blob/main/LICENSE" class="hover:text-white transition">License (MIT)</a></li>
+                        <li><a href="https://github.com/adeyomilawal" class="hover:text-white transition">Author</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>Made with ❤️ by <a href="https://github.com/adeyomilawal" class="text-white hover:underline">Adeyomi Lawal</a></p>
+                <p class="mt-2 text-sm">Open source under the MIT License</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
