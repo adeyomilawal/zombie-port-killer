@@ -96,9 +96,89 @@
             display: inline-block;
             margin: 4px;
         }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white bg-opacity-95 backdrop-blur-md shadow-sm">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="#" class="flex items-center space-x-2 font-bold text-xl text-gray-800">
+                    <span class="text-2xl">🧟</span>
+                    <span>zkill</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="nav-link text-gray-600 hover:text-purple-600">Features</a>
+                    <a href="#installation" class="nav-link text-gray-600 hover:text-purple-600">Installation</a>
+                    <a href="#comparison" class="nav-link text-gray-600 hover:text-purple-600">Comparison</a>
+                    <a href="https://github.com/adeyomilawal/zombie-port-killer#readme" class="nav-link text-gray-600 hover:text-purple-600">Docs</a>
+                    <a href="https://github.com/adeyomilawal/zombie-port-killer"
+                       class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-purple-800 transition flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-gray-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden overflow-hidden max-h-0">
+                <div class="py-4 space-y-3">
+                    <a href="#features" class="block text-gray-600 hover:text-purple-600 py-2">Features</a>
+                    <a href="#installation" class="block text-gray-600 hover:text-purple-600 py-2">Installation</a>
+                    <a href="#comparison" class="block text-gray-600 hover:text-purple-600 py-2">Comparison</a>
+                    <a href="https://github.com/adeyomilawal/zombie-port-killer#readme" class="block text-gray-600 hover:text-purple-600 py-2">Docs</a>
+                    <a href="https://github.com/adeyomilawal/zombie-port-killer"
+                       class="block bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg text-center">
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Spacer for fixed nav -->
+    <div class="h-16"></div>
+
     <!-- Hero Section -->
     <div class="gradient-bg text-white py-20">
         <div class="container mx-auto px-6">
@@ -174,7 +254,7 @@
     </div>
 
     <!-- Features Section -->
-    <div class="py-20 bg-white">
+    <div id="features" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Why zkill?</h2>
             <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
@@ -240,7 +320,7 @@
     </div>
 
     <!-- Installation Section -->
-    <div class="py-20 bg-gray-50">
+    <div id="installation" class="py-20 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Quick Start</h2>
@@ -295,7 +375,7 @@
     </div>
 
     <!-- Before/After Comparison -->
-    <div class="py-20 bg-white">
+    <div id="comparison" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Before vs After</h2>
 
@@ -407,5 +487,34 @@
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            if (mobileMenu.style.maxHeight === '500px') {
+                mobileMenu.style.maxHeight = '0';
+            } else {
+                mobileMenu.style.maxHeight = '500px';
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.style.maxHeight = '0';
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.style.maxHeight = '0';
+            }
+        });
+    </script>
 </body>
 </html>
