@@ -124,6 +124,111 @@
         #mobile-menu {
             transition: max-height 0.3s ease-in-out;
         }
+
+        /* Dark Mode Styles */
+        .dark {
+            color-scheme: dark;
+        }
+
+        .dark .bg-gray-50 {
+            background-color: #0f172a;
+        }
+
+        .dark .bg-white {
+            background-color: #1e293b;
+        }
+
+        .dark .text-gray-800 {
+            color: #f1f5f9;
+        }
+
+        .dark .text-gray-700 {
+            color: #cbd5e1;
+        }
+
+        .dark .text-gray-600 {
+            color: #94a3b8;
+        }
+
+        .dark .text-gray-400 {
+            color: #64748b;
+        }
+
+        .dark .border-gray-100 {
+            border-color: #334155;
+        }
+
+        .dark .border-gray-800 {
+            border-color: #475569;
+        }
+
+        .dark nav {
+            background-color: rgba(15, 23, 42, 0.95);
+        }
+
+        .dark .shadow-lg,
+        .dark .shadow-sm {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .dark .feature-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark .bg-red-50 {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .dark .bg-green-50 {
+            background-color: rgba(34, 197, 94, 0.1);
+        }
+
+        .dark .border-red-200 {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .dark .border-green-200 {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .dark footer {
+            background-color: #0f172a;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(107, 114, 128, 0.1);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(107, 114, 128, 0.2);
+            transform: scale(1.1);
+        }
+
+        .dark .theme-toggle {
+            background: rgba(148, 163, 184, 0.1);
+        }
+
+        .dark .theme-toggle:hover {
+            background: rgba(148, 163, 184, 0.2);
+        }
+
+        /* Smooth transitions */
+        body,
+        nav,
+        .feature-card,
+        .bg-white,
+        .bg-gray-50 {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -143,6 +248,20 @@
                     <a href="#installation" class="nav-link text-gray-600 hover:text-purple-600">Installation</a>
                     <a href="#comparison" class="nav-link text-gray-600 hover:text-purple-600">Comparison</a>
                     <a href="https://github.com/adeyomilawal/zombie-port-killer#readme" class="nav-link text-gray-600 hover:text-purple-600">Docs</a>
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="theme-toggle text-gray-600 dark:text-gray-300" title="Toggle theme">
+                        <svg id="theme-icon-light" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                        <svg id="theme-icon-system" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+
                     <a href="https://github.com/adeyomilawal/zombie-port-killer"
                        class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-purple-800 transition flex items-center gap-2">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -167,6 +286,9 @@
                     <a href="#installation" class="block text-gray-600 hover:text-purple-600 py-2">Installation</a>
                     <a href="#comparison" class="block text-gray-600 hover:text-purple-600 py-2">Comparison</a>
                     <a href="https://github.com/adeyomilawal/zombie-port-killer#readme" class="block text-gray-600 hover:text-purple-600 py-2">Docs</a>
+                    <button id="mobile-theme-toggle" class="w-full text-left text-gray-600 hover:text-purple-600 py-2">
+                        <span id="mobile-theme-text">Theme: System</span>
+                    </button>
                     <a href="https://github.com/adeyomilawal/zombie-port-killer"
                        class="block bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg text-center">
                         GitHub
@@ -488,8 +610,76 @@
         </div>
     </footer>
 
-    <!-- Mobile Menu Toggle Script -->
+    <!-- Theme & Mobile Menu Scripts -->
     <script>
+        // Theme Management
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+        const mobileThemeText = document.getElementById('mobile-theme-text');
+        const iconLight = document.getElementById('theme-icon-light');
+        const iconDark = document.getElementById('theme-icon-dark');
+        const iconSystem = document.getElementById('theme-icon-system');
+
+        // Theme states: 'light', 'dark', 'system'
+        let currentTheme = localStorage.getItem('theme') || 'system';
+
+        // Apply theme based on preference
+        function applyTheme(theme) {
+            if (theme === 'system') {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', prefersDark);
+            } else {
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+            }
+            updateThemeIcons(theme);
+        }
+
+        // Update theme icons
+        function updateThemeIcons(theme) {
+            iconLight.classList.add('hidden');
+            iconDark.classList.add('hidden');
+            iconSystem.classList.add('hidden');
+
+            if (theme === 'light') {
+                iconLight.classList.remove('hidden');
+                mobileThemeText.textContent = 'Theme: Light';
+            } else if (theme === 'dark') {
+                iconDark.classList.remove('hidden');
+                mobileThemeText.textContent = 'Theme: Dark';
+            } else {
+                iconSystem.classList.remove('hidden');
+                mobileThemeText.textContent = 'Theme: System';
+            }
+        }
+
+        // Cycle through themes: system -> light -> dark -> system
+        function cycleTheme() {
+            if (currentTheme === 'system') {
+                currentTheme = 'light';
+            } else if (currentTheme === 'light') {
+                currentTheme = 'dark';
+            } else {
+                currentTheme = 'system';
+            }
+            localStorage.setItem('theme', currentTheme);
+            applyTheme(currentTheme);
+        }
+
+        // Initialize theme
+        applyTheme(currentTheme);
+
+        // Theme toggle event listeners
+        themeToggle.addEventListener('click', cycleTheme);
+        mobileThemeToggle.addEventListener('click', cycleTheme);
+
+        // Watch for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (currentTheme === 'system') {
+                applyTheme('system');
+            }
+        });
+
+        // Mobile Menu Toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
