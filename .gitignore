@@ -10,7 +10,7 @@ package-lock.json
 *.tsbuildinfo
 
 # Documentation (internal)
-docs/
+internal docs/
 
 # Environment
 .env
