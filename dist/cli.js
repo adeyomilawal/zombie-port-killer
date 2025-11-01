@@ -26,10 +26,12 @@ const scanCommand = new scan_command_1.ScanCommand(processService, storageServic
 const autoCommand = new auto_command_1.AutoCommand(processService, storageService, projectService);
 // Create CLI program
 const program = new commander_1.Command();
+// Read version from package.json
+const package_json_1 = __importDefault(require("../package.json"));
 program
     .name("zkill")
     .description("Kill zombie processes blocking your ports")
-    .version("1.0.0");
+    .version(package_json_1.default.version);
 // Main command: zkill <port>
 program
     .argument("[port]", "Port number to check and kill")

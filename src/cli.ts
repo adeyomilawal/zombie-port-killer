@@ -35,10 +35,13 @@ const autoCommand = new AutoCommand(
 // Create CLI program
 const program = new Command();
 
+// Read version from package.json
+import packageJson from "../package.json";
+
 program
   .name("zkill")
   .description("Kill zombie processes blocking your ports")
-  .version("1.0.0");
+  .version(packageJson.version);
 
 // Main command: zkill <port>
 program

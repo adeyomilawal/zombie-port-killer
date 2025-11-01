@@ -81,6 +81,48 @@ zkill --version
 
 ---
 
+## Update zkill
+
+To update `zkill` to the latest version:
+
+### npm
+
+```bash
+npm update -g zombie-port-killer
+```
+
+Or reinstall to get the latest:
+
+```bash
+npm install -g zombie-port-killer@latest
+```
+
+### Yarn
+
+```bash
+yarn global upgrade zombie-port-killer
+```
+
+### pnpm
+
+```bash
+pnpm update -g zombie-port-killer
+```
+
+### Check Your Current Version
+
+```bash
+zkill --version
+```
+
+### Check for Latest Version
+
+```bash
+npm view zombie-port-killer version
+```
+
+---
+
 ## Quick Start
 
 ### Kill a process on a specific port
