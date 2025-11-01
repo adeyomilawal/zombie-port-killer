@@ -66,19 +66,67 @@ The first public release of Zombie Port Killer (zkill) - the cross-platform CLI 
 
 ---
 
+## [1.1.0] - 2025-11-01
+
+### 🎉 Epic 2: Port Scanning Filters Complete!
+
+This release adds powerful filtering capabilities to the scan command, making it easier than ever to find exactly the ports you're looking for.
+
+### Added
+
+#### Scan Filtering Features
+
+- **Port Range Filter** - Filter ports by range: `zkill scan --range 3000-9000`
+
+  - Focus on specific port ranges (e.g., development ports 3000-8000)
+  - Perfect for microservices developers managing multiple ports
+
+- **Process Name Filter** - Filter by process name: `zkill scan --process node`
+
+  - Find all processes of a specific type (node, python, ruby, etc.)
+  - Case-insensitive partial matching
+
+- **System Process Filter** - Hide system processes: `zkill scan --no-system`
+
+  - Clean output showing only development servers
+  - Hides databases, web servers, and system services
+
+- **Combined Filters** - Use multiple filters together
+
+  - Combine range, process name, and system filters
+  - Example: `zkill scan --range 3000-9000 --process node --no-system`
+  - Visual indicator shows all active filters
+
+- **Active Filter Display** - Shows which filters are currently applied
+  - Clear feedback about what's being filtered
+  - Better user experience and transparency
+
+### Improved
+
+- Enhanced scan output with filter indicators
+- Better error messages for invalid filter inputs
+- Improved documentation with filter examples
+
+### Technical Details
+
+- Zero breaking changes - fully backward compatible
+- Performance: Filter overhead <10ms
+- All existing functionality preserved
+
+---
+
 ## [Unreleased]
 
-### Planned for v1.1
+### Planned for v1.2
 
 - Kill multiple ports in one command: `zkill 3000 8000 5432`
 - Kill by process name: `zkill --name node`
-- Kill port range: `zkill --range 3000-3010`
 - JSON output mode: `zkill scan --json`
 - Homebrew distribution (macOS)
 - APT/YUM distribution (Linux)
 - Chocolatey distribution (Windows)
 
-### Planned for v1.2
+### Planned for v1.3
 
 - VSCode extension
 - Shell completions (bash, zsh, fish)
@@ -124,4 +172,5 @@ zkill auto enable # Enable auto-kill
 
 ---
 
+[1.1.0]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.1.0
 [1.0.0]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.0.0

@@ -142,6 +142,66 @@ Port 5432 - postgres
      User: postgres
 ```
 
+### Filter scans
+
+#### Filter by port range
+
+Show only ports within a specific range:
+
+```bash
+zkill scan --range 3000-9000
+```
+
+This is useful when you only care about development ports (typically 3000-8000).
+
+#### Filter by process name
+
+Show only processes matching a name:
+
+```bash
+zkill scan --process node
+# or
+zkill scan --process python
+```
+
+Great for focusing on specific technology stacks.
+
+#### Hide system processes
+
+Hide system and critical processes to focus on development servers:
+
+```bash
+zkill scan --no-system
+```
+
+This filters out processes like postgres, nginx, apache, etc., showing only your development servers.
+
+#### Combine filters
+
+You can combine multiple filters:
+
+```bash
+zkill scan --range 3000-9000 --process node --no-system
+```
+
+**Output:**
+
+```
+🔍 Filters: Port range: 3000-9000, Process: node, Hiding system processes
+
+📊 Active Ports (2 found):
+
+Port 3000 - node (my-react-app)
+     PID: 12345
+     Command: /usr/local/bin/node server.js
+     User: developer
+
+Port 4000 - node (my-other-app)
+     PID: 12347
+     Command: /usr/local/bin/node index.js
+     User: developer
+```
+
 ### Show port-to-project mappings
 
 ```bash
@@ -535,9 +595,17 @@ A: No. Zero telemetry. Everything runs locally.
 
 ### v1.1 (Next Release)
 
+**Port-based features:**
+
 - [ ] Kill multiple ports: `zkill 3000 8000 5432`
-- [ ] Kill by process name: `zkill --name node`
 - [ ] Kill port range: `zkill --range 3000-3010`
+
+**Process name features:**
+
+- [ ] Kill by process name: `zkill --name node`
+- [ ] Pattern matching: `zkill --pattern "node.*server"`
+- [ ] Exact match mode: `zkill --name node --exact`
+- [ ] Case-insensitive matching: `zkill --name NODE --ignore-case`
 
 ---
 

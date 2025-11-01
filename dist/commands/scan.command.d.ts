@@ -2,8 +2,13 @@
  * Scan Command
  * Lists all ports in use and port mappings
  */
-import { ProcessService } from '../services/process.service';
-import { StorageService } from '../services/storage.service';
+import { ProcessService } from "../services/process.service";
+import { StorageService } from "../services/storage.service";
+export interface ScanOptions {
+    range?: string;
+    process?: string;
+    system?: boolean;
+}
 export declare class ScanCommand {
     private processService;
     private storageService;
@@ -11,7 +16,19 @@ export declare class ScanCommand {
     /**
      * Execute scan command - list all ports in use
      */
-    execute(): Promise<void>;
+    execute(options?: ScanOptions): Promise<void>;
+    /**
+     * Apply filters to process list
+     */
+    private applyFilters;
+    /**
+     * Parse port range string (e.g., "3000-9000")
+     */
+    private parsePortRange;
+    /**
+     * Show active filters
+     */
+    private showActiveFilters;
     /**
      * List all port-to-project mappings
      */
