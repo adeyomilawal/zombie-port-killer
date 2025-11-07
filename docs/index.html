@@ -375,6 +375,36 @@
         </div>
     </div>
 
+    <!-- What's New Section -->
+    <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6 border border-white border-opacity-20">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🎉</span>
+                        <h2 class="text-2xl font-bold">What's New in v1.1.1</h2>
+                    </div>
+                    <p class="mb-4 opacity-90">Powerful port scanning filters to help you find exactly what you're looking for!</p>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white bg-opacity-10 rounded p-3">
+                            <div class="font-semibold mb-1">🔍 Port Range Filter</div>
+                            <code class="text-xs opacity-90">zkill scan --range 3000-9000</code>
+                        </div>
+                        <div class="bg-white bg-opacity-10 rounded p-3">
+                            <div class="font-semibold mb-1">🔍 Process Filter</div>
+                            <code class="text-xs opacity-90">zkill scan --process node</code>
+                        </div>
+                        <div class="bg-white bg-opacity-10 rounded p-3">
+                            <div class="font-semibold mb-1">🔍 Hide System</div>
+                            <code class="text-xs opacity-90">zkill scan --no-system</code>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-sm opacity-75">Perfect for microservices developers managing multiple ports!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Features Section -->
     <div id="features" class="py-20 bg-white">
         <div class="container mx-auto px-6">
@@ -437,6 +467,15 @@
                         Color-coded output, loading spinners, and clear messages. A joy to use.
                     </p>
                 </div>
+
+                <!-- Feature 7 -->
+                <div class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="text-4xl mb-4">🔍</div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Smart Scanning</h3>
+                    <p class="text-gray-600">
+                        Filter ports by range, process name, or hide system processes. Perfect for microservices.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -481,6 +520,34 @@
                             <h4 class="font-semibold text-gray-700 mb-2">List all active ports:</h4>
                             <div class="bg-gray-900 text-white p-4 rounded-lg">
                                 <code class="text-green-400">zkill scan</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Filter ports by range:</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill scan --range 3000-9000</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Filter by process name:</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill scan --process node</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Hide system processes:</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill scan --no-system</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">Combine filters (perfect for microservices):</h4>
+                            <div class="bg-gray-900 text-white p-4 rounded-lg">
+                                <code class="text-green-400">zkill scan --range 3000-9000 --process node --no-system</code>
                             </div>
                         </div>
 
@@ -693,13 +760,13 @@
                         <span>Can I kill multiple ports at once?</span>
                     </summary>
                     <div class="ml-11 mt-4 text-gray-600">
-                        <p><strong>Not yet, but it's coming in v1.1!</strong></p>
+                        <p><strong>Not yet, but it's coming in v1.2!</strong></p>
                         <p class="mt-3">Planned features:</p>
                         <ul class="list-disc ml-6 space-y-1 mt-2">
                             <li><code class="bg-gray-100 px-2 py-1 rounded">zkill 3000 8000 5432</code> - Multiple ports</li>
-                            <li><code class="bg-gray-100 px-2 py-1 rounded">zkill --range 3000-3010</code> - Port ranges</li>
                             <li><code class="bg-gray-100 px-2 py-1 rounded">zkill --name node</code> - Kill by process name</li>
                         </ul>
+                        <p class="mt-3"><strong>New in v1.1.1:</strong> You can now filter ports when scanning! Use <code class="bg-gray-100 px-2 py-1 rounded">zkill scan --range 3000-9000</code> to focus on specific port ranges.</p>
                         <p class="mt-3">For now, run zkill multiple times for multiple ports.</p>
                     </div>
                 </details>
