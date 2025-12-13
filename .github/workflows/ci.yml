@@ -33,9 +33,16 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm test -- --verbose --no-coverage
+        run: npm test -- --verbose --no-coverage 2>&1 | tee test-output.log
         continue-on-error: false
         timeout-minutes: 10
+
+      - name: Upload test output
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-output-${{ matrix.os }}-${{ matrix.node-version }}
+          path: test-output.log
 
       - name: Run linter
         run: npm run lint
