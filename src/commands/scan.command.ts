@@ -12,6 +12,7 @@ import { ProcessInfo } from "../types";
 export interface ScanOptions {
   range?: string;
   process?: string;
+  project?: string;
   system?: boolean; // true to show system, false to hide
 }
 
@@ -87,6 +88,15 @@ export class ScanCommand {
       );
     }
 
+    // Filter by project name
+    if (options.project) {
+      const mappings = this.storageService.getMappingsByProjectName(
+        options.project
+      );
+      const projectPorts = new Set(mappings.map((m) => m.port));
+      filtered = filtered.filter((p) => projectPorts.has(p.port));
+    }
+
     return filtered;
   }
 
@@ -132,6 +142,10 @@ export class ScanCommand {
 
     if (options.system === false) {
       filters.push(chalk.cyan("Hiding system processes"));
+    }
+
+    if (options.project) {
+      filters.push(chalk.cyan(`Project: ${options.project}`));
     }
 
     if (filters.length > 0) {

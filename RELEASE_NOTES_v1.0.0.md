@@ -42,13 +42,11 @@ npm install -g zombie-port-killer
 - **Comprehensive Error Messages** - Clear guidance when things go wrong
 - **Help System** - Built-in help with `--help` flag
 
-## Technical Details
+## Performance
 
-- Built with TypeScript for type safety
-- Cross-platform adapter pattern for OS-specific implementations
-- Zero external system dependencies (uses built-in OS commands)
-- Fast performance (<100ms port detection)
-- Small footprint (<50MB memory usage)
+- Fast and lightweight
+- Uses your system's built-in commands - no extra dependencies
+- Typically detects ports in under 100ms
 
 ## Quick Start
 

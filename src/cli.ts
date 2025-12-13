@@ -75,6 +75,7 @@ program
   .description("List all ports in use")
   .option("-r, --range <range>", "Filter by port range (e.g., 3000-9000)")
   .option("-p, --process <name>", "Filter by process name")
+  .option("--project <name>", "Filter by project name")
   .option("--no-system", "Hide system processes")
   .action(async (options) => {
     try {

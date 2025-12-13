@@ -440,7 +440,8 @@ zkill 8000  # API
 
 # Multiple microservices
 zkill scan  # See all ports
-zkill 3000 3001 8000 8080  # Kill multiple (coming soon)
+zkill 3000  # Kill each one
+zkill 8000  # As needed
 ```
 
 ### Database Development
@@ -491,34 +492,25 @@ npm run dev  # Start new project
 
 ## Configuration
 
-Configuration is stored in `~/.zkill/config.json`.
+zkill stores its settings in `~/.zkill/config.json`. You usually don't need to touch this, but if you want to customize things:
 
-**Default configuration:**
+**View your config:**
 
-```json
-{
-  "portMappings": [],
-  "autoKillEnabled": false,
-  "confirmKill": true,
-  "version": "1.0.0"
-}
+```bash
+zkill info  # Shows config location
 ```
 
-**Manually edit** (advanced):
+**Reset everything:**
 
 ```bash
 # macOS/Linux
-nano ~/.zkill/config.json
+rm -rf ~/.zkill
 
 # Windows
-notepad %USERPROFILE%\.zkill\config.json
+rmdir /s %USERPROFILE%\.zkill
 ```
 
-**Reset configuration:**
-
-```bash
-rm -rf ~/.zkill
-```
+Most settings can be changed via commands (like `zkill auto enable`), so manual editing is rarely needed.
 
 ---
 
@@ -613,7 +605,7 @@ A: Yes. `zkill` asks for confirmation and warns about system processes.
 A: Yes! Works on macOS, Linux, and Windows.
 
 **Q: Can I kill multiple ports at once?**
-A: Coming soon in v1.1.
+A: Not yet, but it's on the roadmap! For now, just run `zkill` multiple times.
 
 **Q: Will this kill my database?**
 A: Only if you explicitly confirm. `zkill` warns about critical processes.
@@ -633,52 +625,47 @@ A: No. Zero telemetry. Everything runs locally.
 
 ---
 
-## Roadmap
+## What's Coming Next
 
-### v1.1 (Next Release)
+We're always working on improvements! Here's what's planned:
 
-**Port-based features:**
+- 🎯 Kill multiple ports at once: `zkill 3000 8000 5432`
+- 🎯 Kill by process name: `zkill --name node`
+- 🎯 Port range killing: `zkill --range 3000-3010`
 
-- [ ] Kill multiple ports: `zkill 3000 8000 5432`
-- [ ] Kill port range: `zkill --range 3000-3010`
-
-**Process name features:**
-
-- [ ] Kill by process name: `zkill --name node`
-- [ ] Pattern matching: `zkill --pattern "node.*server"`
-- [ ] Exact match mode: `zkill --name node --exact`
-- [ ] Case-insensitive matching: `zkill --name NODE --ignore-case`
+Have ideas? [Open an issue](https://github.com/adeyomilawal/zombie-port-killer/issues) or [start a discussion](https://github.com/adeyomilawal/zombie-port-killer/discussions)!
 
 ---
 
 ## Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon).
+We'd love your help! Whether it's fixing bugs, adding features, or improving docs, every contribution matters.
+
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Test thoroughly
+5. Commit with clear messages (`git commit -m 'Add amazing feature'`)
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details (coming soon).
 
 ### Development Setup
 
 ```bash
-# Clone the repo
+# Clone and setup
 git clone https://github.com/adeyomilawal/zombie-port-killer.git
 cd zombie-port-killer
-
-# Install dependencies
 npm install
 
-# Build
+# Build and test
 npm run build
+npm test
 
 # Link for local testing
 npm link
-
-# Test
-zkill 3000
-```
-
-### Running Tests
-
-```bash
-npm test
+zkill --version  # Should work now!
 ```
 
 ---
@@ -691,10 +678,11 @@ MIT License - see [LICENSE](LICENSE) file.
 
 ## Support
 
-- 🐛 **Bug reports:** [GitHub Issues](https://github.com/adeyomilawal/zombie-port-killer/issues)
-- 💡 **Feature requests:** [GitHub Discussions](https://github.com/adeyomilawal/zombie-port-killer/discussions)
-- 📧 **Email:** support@example.com
-- 💬 **Discord:** [Join our community](https://discord.gg/zkill)
+Having issues? We're here to help!
+
+- 🐛 **Found a bug?** [Open an issue](https://github.com/adeyomilawal/zombie-port-killer/issues)
+- 💡 **Have an idea?** [Start a discussion](https://github.com/adeyomilawal/zombie-port-killer/discussions)
+- ❓ **Need help?** Check existing [issues](https://github.com/adeyomilawal/zombie-port-killer/issues) or open a new one
 
 ---
 

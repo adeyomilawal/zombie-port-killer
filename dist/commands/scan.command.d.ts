@@ -7,6 +7,7 @@ import { StorageService } from "../services/storage.service";
 export interface ScanOptions {
     range?: string;
     process?: string;
+    project?: string;
     system?: boolean;
 }
 export declare class ScanCommand {

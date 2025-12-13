@@ -40,6 +40,10 @@ export declare class StorageService {
      */
     getMappingsForProject(projectPath: string): PortMapping[];
     /**
+     * Get mappings by project name (case-insensitive)
+     */
+    getMappingsByProjectName(projectName: string): PortMapping[];
+    /**
      * Remove port mapping
      */
     removePortMapping(port: number): void;

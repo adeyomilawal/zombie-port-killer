@@ -58,6 +58,12 @@ class ScanCommand {
         if (options.system === false) {
             filtered = filtered.filter((p) => !this.processService.isCriticalProcess(p));
         }
+        // Filter by project name
+        if (options.project) {
+            const mappings = this.storageService.getMappingsByProjectName(options.project);
+            const projectPorts = new Set(mappings.map((m) => m.port));
+            filtered = filtered.filter((p) => projectPorts.has(p.port));
+        }
         return filtered;
     }
     /**
@@ -91,6 +97,9 @@ class ScanCommand {
         }
         if (options.system === false) {
             filters.push(chalk_1.default.cyan("Hiding system processes"));
+        }
+        if (options.project) {
+            filters.push(chalk_1.default.cyan(`Project: ${options.project}`));
         }
         if (filters.length > 0) {
             console.log(chalk_1.default.gray("\n🔍 Filters: " + filters.join(", ")));

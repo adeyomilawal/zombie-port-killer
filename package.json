@@ -23,7 +23,10 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "tsc --noEmit",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run build && npm test",
+    "version:patch": "npm version patch && git push --follow-tags",
+    "version:minor": "npm version minor && git push --follow-tags",
+    "version:major": "npm version major && git push --follow-tags"
   },
   "keywords": [
     "port",

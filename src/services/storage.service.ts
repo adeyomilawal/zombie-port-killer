@@ -119,6 +119,16 @@ export class StorageService {
   }
 
   /**
+   * Get mappings by project name (case-insensitive)
+   */
+  getMappingsByProjectName(projectName: string): PortMapping[] {
+    const normalizedName = projectName.toLowerCase();
+    return this.config.portMappings.filter(
+      (m) => m.projectName.toLowerCase().includes(normalizedName)
+    );
+  }
+
+  /**
    * Remove port mapping
    */
   removePortMapping(port: number): void {

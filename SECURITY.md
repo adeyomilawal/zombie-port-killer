@@ -182,10 +182,7 @@ zkill 3000  # Unnecessary elevated permissions
 
 ## Security Audit History
 
-| Date       | Auditor        | Findings                | Status             |
-| ---------- | -------------- | ----------------------- | ------------------ |
-| 2025-11-15 | Internal Team  | Initial security review | ✅ Complete        |
-| TBD        | External Audit | Pending                 | 📅 Planned Q1 2026 |
+We regularly review the codebase for security issues. As the project grows, we plan to have external security audits performed.
 
 ---
 
@@ -202,9 +199,7 @@ We regularly audit our dependencies:
 
 ### Automated Scanning
 
-- GitHub Dependabot enabled
-- `npm audit` run on every build
-- Security patches applied within 48 hours
+We use GitHub Dependabot to automatically check for security issues in dependencies and apply patches promptly.
 
 ---
 
@@ -244,9 +239,7 @@ _Your name could be here! Report vulnerabilities responsibly._
 
 **Primary Contact:** lawaladeyomio@gmail.com
 
-**PGP Key:** Not currently available (planned Q1 2026)
-
-**GitHub Security Advisories:** [github.com/adeyomilawal/zombie-port-killer/security/advisories](https://github.com/adeyomilawal/zombie-port-killer/security/advisories)
+**GitHub Security Advisories:** [View advisories](https://github.com/adeyomilawal/zombie-port-killer/security/advisories)
 
 ---
 
@@ -260,13 +253,13 @@ _Your name could be here! Report vulnerabilities responsibly._
 
 ## Questions?
 
-For security-related questions (non-vulnerabilities):
+Have a security question (but not a vulnerability)? Feel free to:
 
 - Open a [GitHub Discussion](https://github.com/adeyomilawal/zombie-port-killer/discussions)
-- Email: lawaladeyomio@gmail.com
+- Reach out via email
 
 ---
 
-**Remember:** If you find a security issue, please report it privately via email, not through public GitHub issues.
+**Important:** If you find a security issue, please email us directly rather than opening a public GitHub issue. This gives us time to fix it before it becomes public.
 
-Thank you for helping keep zkill and its users safe! 🔒
+Thanks for helping keep zkill safe! 🔒

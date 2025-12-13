@@ -1,8 +1,6 @@
-# Contributing to Zombie Port Killer
+# Contributing to zkill
 
-First off, thank you for considering contributing to zkill! 🎉
-
-It's people like you that make zkill such a great tool for developers worldwide.
+Thanks for wanting to help! 🎉 Every contribution, big or small, makes zkill better for everyone.
 
 ## Table of Contents
 
@@ -18,14 +16,14 @@ It's people like you that make zkill such a great tool for developers worldwide.
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to uphold this code.
+We're all here to build something useful together. Let's keep it friendly and helpful.
 
-**In short:**
+**The basics:**
 
-- Be respectful and inclusive
-- Be patient with new contributors
-- Focus on what's best for the community
-- Show empathy towards others
+- Be respectful and kind
+- Help newcomers feel welcome
+- Focus on what helps the community
+- We're all learning - be patient
 
 ---
 
@@ -236,10 +234,10 @@ npx tsc --noEmit
 
 ### PR Review Process
 
-- Maintainers will review your PR within 3-5 days
-- Address any requested changes
-- Once approved, a maintainer will merge your PR
-- Your contribution will be credited in the changelog
+- We'll review your PR as soon as we can (usually within a few days)
+- If we ask for changes, it's just to make sure everything works well
+- Once it looks good, we'll merge it
+- You'll be credited in the changelog - you earned it!
 
 ---
 
@@ -445,9 +443,10 @@ When modifying platform adapters:
 
 ## Questions?
 
-- 💬 Open a [Discussion](https://github.com/adeyomilawal/zombie-port-killer/discussions)
-- 📧 Email: lawaladeyomio@gmail.com
-- 🐛 [GitHub Issues](https://github.com/adeyomilawal/zombie-port-killer/issues)
+Not sure about something? That's totally fine!
+
+- 💬 Start a [discussion](https://github.com/adeyomilawal/zombie-port-killer/discussions)
+- 🐛 Open an [issue](https://github.com/adeyomilawal/zombie-port-killer/issues)
 
 ---
 
@@ -459,10 +458,10 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ## Recognition
 
-All contributors will be:
+Contributors are awesome! We'll make sure you get credit:
 
-- Listed in the project's README
-- Credited in release notes
-- Forever appreciated by the community! ❤️
+- Your name in the README
+- Shoutout in release notes
+- Our eternal gratitude! ❤️
 
-Thank you for contributing to zkill! 🎉
+Thanks for making zkill better! 🎉
