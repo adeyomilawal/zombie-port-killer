@@ -152,6 +152,7 @@ describe('ScanCommand', () => {
           projectName: 'my-project',
           projectPath: '/my/path',
           autoKill: false,
+          lastUsed: new Date(),
         },
       ]);
       mockStorageService.getPortMapping.mockReturnValue(null);
@@ -173,6 +174,7 @@ describe('ScanCommand', () => {
         projectName: 'test-project',
         projectPath: '/test/path',
         autoKill: false,
+        lastUsed: new Date(),
       });
 
       await scanCommand.execute();

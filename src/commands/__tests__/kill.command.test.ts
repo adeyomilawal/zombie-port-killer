@@ -44,9 +44,7 @@ describe('KillCommand', () => {
     // Create mock instances
     mockProcessService = new ProcessService() as jest.Mocked<ProcessService>;
     mockStorageService = new StorageService() as jest.Mocked<StorageService>;
-    mockProjectService = new ProjectService(
-      mockStorageService
-    ) as jest.Mocked<ProjectService>;
+    mockProjectService = new ProjectService() as jest.Mocked<ProjectService>;
 
     // Create command instance
     killCommand = new KillCommand(
@@ -97,6 +95,7 @@ describe('KillCommand', () => {
         projectName: 'test-project',
         projectPath: '/test/path',
         autoKill: false,
+        lastUsed: new Date(),
       });
       mockStorageService.isConfirmKillEnabled.mockReturnValue(false);
       mockProcessService.killProcess.mockResolvedValue(true);
@@ -133,7 +132,7 @@ describe('KillCommand', () => {
       mockProcessService.isCriticalProcess.mockReturnValue(false);
       mockStorageService.getPortMapping.mockReturnValue(null);
       mockStorageService.isConfirmKillEnabled.mockReturnValue(true);
-      (inquirer.prompt as jest.Mock).mockResolvedValue({ confirmed: true });
+      (inquirer.prompt as unknown as jest.Mock).mockResolvedValue({ confirmed: true });
       mockProcessService.killProcess.mockResolvedValue(true);
       mockProjectService.isProjectDirectory.mockReturnValue(false);
 
@@ -148,7 +147,7 @@ describe('KillCommand', () => {
       mockProcessService.isCriticalProcess.mockReturnValue(false);
       mockStorageService.getPortMapping.mockReturnValue(null);
       mockStorageService.isConfirmKillEnabled.mockReturnValue(true);
-      (inquirer.prompt as jest.Mock).mockResolvedValue({ confirmed: false });
+      (inquirer.prompt as unknown as jest.Mock).mockResolvedValue({ confirmed: false });
 
       await killCommand.execute(3000, false);
 

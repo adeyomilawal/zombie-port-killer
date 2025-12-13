@@ -28,9 +28,7 @@ describe('AutoCommand', () => {
     // Create mock instances
     mockProcessService = new ProcessService() as jest.Mocked<ProcessService>;
     mockStorageService = new StorageService() as jest.Mocked<StorageService>;
-    mockProjectService = new ProjectService(
-      mockStorageService
-    ) as jest.Mocked<ProjectService>;
+    mockProjectService = new ProjectService() as jest.Mocked<ProjectService>;
 
     // Create command instance
     autoCommand = new AutoCommand(
@@ -103,18 +101,21 @@ describe('AutoCommand', () => {
           projectName: 'project-1',
           projectPath: '/path/1',
           autoKill: true,
+          lastUsed: new Date(),
         },
         {
           port: 4000,
           projectName: 'project-2',
           projectPath: '/path/2',
           autoKill: true,
+          lastUsed: new Date(),
         },
         {
           port: 5000,
           projectName: 'project-3',
           projectPath: '/path/3',
           autoKill: false,
+          lastUsed: new Date(),
         },
       ]);
 
@@ -145,6 +146,7 @@ describe('AutoCommand', () => {
           projectName: 'current-project',
           projectPath: '/current/path',
           autoKill: true,
+          lastUsed: new Date(),
         },
       ]);
 
@@ -163,6 +165,7 @@ describe('AutoCommand', () => {
           projectName: 'other-project',
           projectPath: '/other/path',
           autoKill: true,
+          lastUsed: new Date(),
         },
       ]);
       mockProcessService.findByPort.mockResolvedValue(null);
@@ -192,10 +195,11 @@ describe('AutoCommand', () => {
           projectName: 'other-project',
           projectPath: '/other/path',
           autoKill: true,
+          lastUsed: new Date(),
         },
       ]);
       mockProcessService.findByPort.mockResolvedValue(mockProcess);
-      (inquirer.prompt as jest.Mock).mockResolvedValue({ confirmed: false });
+      (inquirer.prompt as unknown as jest.Mock).mockResolvedValue({ confirmed: false });
 
       await autoCommand.checkAndKill();
 
@@ -224,10 +228,11 @@ describe('AutoCommand', () => {
           projectName: 'other-project',
           projectPath: '/other/path',
           autoKill: true,
+          lastUsed: new Date(),
         },
       ]);
       mockProcessService.findByPort.mockResolvedValue(mockProcess);
-      (inquirer.prompt as jest.Mock).mockResolvedValue({ confirmed: false });
+      (inquirer.prompt as unknown as jest.Mock).mockResolvedValue({ confirmed: false });
 
       await autoCommand.checkAndKill();
 
@@ -253,10 +258,11 @@ describe('AutoCommand', () => {
           projectName: 'other-project',
           projectPath: '/other/path',
           autoKill: true,
+          lastUsed: new Date(),
         },
       ]);
       mockProcessService.findByPort.mockResolvedValue(mockProcess);
-      (inquirer.prompt as jest.Mock).mockResolvedValue({ confirmed: true });
+      (inquirer.prompt as unknown as jest.Mock).mockResolvedValue({ confirmed: true });
       mockProcessService.killProcess.mockResolvedValue(true);
 
       await autoCommand.checkAndKill();
@@ -289,18 +295,20 @@ describe('AutoCommand', () => {
           projectName: 'project-1',
           projectPath: '/path/1',
           autoKill: true,
+          lastUsed: new Date(),
         },
         {
           port: 4000,
           projectName: 'project-2',
           projectPath: '/path/2',
           autoKill: true,
+          lastUsed: new Date(),
         },
       ]);
       mockProcessService.findByPort
         .mockResolvedValueOnce(mockProcess1)
         .mockResolvedValueOnce(mockProcess2);
-      (inquirer.prompt as jest.Mock).mockResolvedValue({ confirmed: true });
+      (inquirer.prompt as unknown as jest.Mock).mockResolvedValue({ confirmed: true });
       mockProcessService.killProcess.mockResolvedValue(true);
 
       await autoCommand.checkAndKill();
@@ -330,6 +338,7 @@ describe('AutoCommand', () => {
         projectName: 'test-project',
         projectPath: '/test/path',
         autoKill: false,
+        lastUsed: new Date(),
       });
 
       await autoCommand.togglePort(3000);
@@ -339,6 +348,7 @@ describe('AutoCommand', () => {
         projectName: 'test-project',
         projectPath: '/test/path',
         autoKill: true,
+        lastUsed: expect.any(Date),
       });
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining('Auto-kill enabled for port 3000')
@@ -351,6 +361,7 @@ describe('AutoCommand', () => {
         projectName: 'test-project',
         projectPath: '/test/path',
         autoKill: true,
+        lastUsed: new Date(),
       });
 
       await autoCommand.togglePort(3000);
@@ -360,6 +371,7 @@ describe('AutoCommand', () => {
         projectName: 'test-project',
         projectPath: '/test/path',
         autoKill: false,
+        lastUsed: expect.any(Date),
       });
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining('Auto-kill disabled for port 3000')
