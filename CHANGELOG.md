@@ -50,13 +50,11 @@ The first public release of Zombie Port Killer (zkill) - the cross-platform CLI 
 - **Auto-Kill Settings** - Toggle auto-kill globally or per-port
 - **Confirmation Settings** - Disable confirmation prompts if desired
 
-### Technical Details
+### Performance
 
-- Built with TypeScript for type safety
-- Cross-platform adapter pattern for OS-specific implementations
-- Zero external system dependencies (uses built-in OS commands)
-- Fast performance (<100ms port detection)
-- Small footprint (<50MB memory usage)
+- Fast port detection (typically under 100ms)
+- Lightweight and efficient
+- Uses built-in OS commands - no extra dependencies needed
 
 ### Known Limitations
 
@@ -68,7 +66,7 @@ The first public release of Zombie Port Killer (zkill) - the cross-platform CLI 
 
 ## [1.1.0] - 2025-11-01
 
-### 🎉 Epic 2: Port Scanning Filters Complete!
+### 🎉 Port Scanning Filters
 
 This release adds powerful filtering capabilities to the scan command, making it easier than ever to find exactly the ports you're looking for.
 
@@ -107,10 +105,57 @@ This release adds powerful filtering capabilities to the scan command, making it
 - Better error messages for invalid filter inputs
 - Improved documentation with filter examples
 
-### Technical Details
+### Notes
 
-- Zero breaking changes - fully backward compatible
-- Performance: Filter overhead <10ms
+- Fully backward compatible - no breaking changes
+- All existing functionality works exactly as before
+
+---
+
+## [1.1.2] - 2025-12-13
+
+### 🎉 Project Awareness
+
+This release adds intelligent project detection and port-to-project mapping, making zkill smarter about understanding your development workflow.
+
+### Added
+
+#### Project Detection
+
+- **Multi-language Support** - Automatically detects projects from:
+  - Node.js (package.json)
+  - Python (requirements.txt)
+  - Ruby (Gemfile)
+  - Go (go.mod)
+  - Rust (Cargo.toml)
+  - PHP (composer.json)
+  - Java (pom.xml)
+- **Git Integration** - Falls back to git repository name if no project file found
+- **Project Type Detection** - Identifies framework types (Next.js, React, Express, NestJS, etc.)
+
+#### Port-to-Project Mapping
+
+- **Automatic Association** - When you kill a process from within a project directory, zkill remembers which port belongs to which project
+- **Persistent Storage** - Mappings stored in `~/.zkill/config.json`
+- **Project Filter** - Filter scans by project: `zkill scan --project myapp`
+- **Auto-learning** - Builds knowledge of your projects over time
+
+#### Enhanced Commands
+
+- **Scan with Project Filter** - `zkill scan --project myapp` shows only ports for that project
+- **Project Info in Scan** - Scan output now shows project names next to ports
+- **List Mappings** - `zkill list` shows all port-to-project associations
+
+### Improved
+
+- Better project detection accuracy
+- Scan output now displays project associations
+- More intelligent port management
+
+### Notes
+
+- Project awareness works automatically - no setup required
+- Mappings are created when you kill processes from project directories
 - All existing functionality preserved
 
 ---
@@ -164,13 +209,13 @@ zkill auto enable # Enable auto-kill
 
 **Feedback & Support:**
 
-- 🐛 Report bugs: [GitHub Issues](https://github.com/adeyomilawal/zombie-port-killer/issues)
-- 💡 Request features: [GitHub Discussions](https://github.com/adeyomilawal/zombie-port-killer/discussions)
-- 📧 Email: lawaladeyomio@gmail.com
+- 🐛 Found a bug? [Open an issue](https://github.com/adeyomilawal/zombie-port-killer/issues)
+- 💡 Have an idea? [Start a discussion](https://github.com/adeyomilawal/zombie-port-killer/discussions)
 
-**Thank you** for trying zkill! We'd love to hear your feedback.
+Thanks for trying zkill! We'd love to hear what you think.
 
 ---
 
+[1.1.2]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.1.2
 [1.1.0]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.1.0
 [1.0.0]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.0.0
