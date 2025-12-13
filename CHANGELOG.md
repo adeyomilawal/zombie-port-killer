@@ -160,6 +160,16 @@ This release adds intelligent project detection and port-to-project mapping, mak
 
 ---
 
+## [1.1.3] - 2025-12-13
+
+### 🐛 Bug Fixes & Improvements
+
+- Fixed CI workflow issues
+- Improved documentation
+- Better error handling
+
+---
+
 ## [Unreleased]
 
 ### Planned for v1.2
