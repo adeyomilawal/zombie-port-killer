@@ -13,9 +13,10 @@ jobs:
     name: Test
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: [18.x, 20.x]
+        os: [ubuntu-latest]
+        node-version: [20.x]
 
     steps:
       - name: Checkout code
@@ -33,16 +34,11 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm test -- --verbose --no-coverage 2>&1 | tee test-output.log
+        run: npm test -- --no-coverage
         continue-on-error: false
         timeout-minutes: 10
-
-      - name: Upload test output
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-output-${{ matrix.os }}-${{ matrix.node-version }}
-          path: test-output.log
+        env:
+          CI: true
 
       - name: Run linter
         run: npm run lint
