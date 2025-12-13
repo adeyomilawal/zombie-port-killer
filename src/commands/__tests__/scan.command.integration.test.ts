@@ -4,14 +4,12 @@
  */
 
 import { execSync } from "child_process";
-import { StorageService } from "../../services/storage.service";
 import path from "path";
 import fs from "fs";
 import os from "os";
 import net from "net";
 
 describe("Scan Command Integration", () => {
-  let storageService: StorageService;
   let testConfigPath: string;
   let server: net.Server | null = null;
 
@@ -26,8 +24,6 @@ describe("Scan Command Integration", () => {
       }
       return nativeJoin(...args);
     });
-
-    storageService = new StorageService();
   });
 
   afterAll(() => {
@@ -113,8 +109,8 @@ describe("Scan Command Integration", () => {
         stdio: "pipe",
       });
 
-      // Should show number of configured mappings
-      expect(output).toMatch(/\d+.*configured/i);
+      // Should show either "No port mappings configured" (0 mappings) or "N configured" (>0 mappings)
+      expect(output).toMatch(/((No\s+)?port\s+mappings?\s+configured|(\d+)\s+configured)/i);
     });
   });
 });
