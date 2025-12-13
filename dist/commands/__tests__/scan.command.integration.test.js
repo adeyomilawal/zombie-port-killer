@@ -8,13 +8,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
-const storage_service_1 = require("../../services/storage.service");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const os_1 = __importDefault(require("os"));
 const net_1 = __importDefault(require("net"));
 describe("Scan Command Integration", () => {
-    let storageService;
     let testConfigPath;
     let server = null;
     beforeAll(() => {
@@ -27,7 +25,6 @@ describe("Scan Command Integration", () => {
             }
             return nativeJoin(...args);
         });
-        storageService = new storage_service_1.StorageService();
     });
     afterAll(() => {
         if (fs_1.default.existsSync(testConfigPath)) {
@@ -98,8 +95,8 @@ describe("Scan Command Integration", () => {
                 encoding: "utf-8",
                 stdio: "pipe",
             });
-            // Should show number of configured mappings
-            expect(output).toMatch(/\d+.*configured/i);
+            // Should show either "No port mappings configured" (0 mappings) or "N configured" (>0 mappings)
+            expect(output).toMatch(/((No\s+)?port\s+mappings?\s+configured|(\d+)\s+configured)/i);
         });
     });
 });
