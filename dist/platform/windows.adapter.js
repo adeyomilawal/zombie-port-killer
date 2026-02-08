@@ -133,16 +133,120 @@ class WindowsAdapter {
                 // Permission denied or wmic not available, use processName
                 command = processName;
             }
+            // Gather additional context information
+            const context = await this.getProcessContext(pid);
             return {
                 pid,
                 port,
                 processName,
                 command,
+                ...context,
             };
         }
         catch (error) {
             return null;
         }
+    }
+    /**
+     * Get process context information (uptime, parent process, service manager, working directory)
+     */
+    async getProcessContext(pid) {
+        const context = {};
+        try {
+            // Get CreationDate, ParentProcessId, and ExecutablePath using wmic
+            const wmicResult = (0, child_process_1.execSync)(`wmic process where "ProcessId=${pid}" get CreationDate,ParentProcessId,ExecutablePath /format:list`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] });
+            // Parse CreationDate (format: YYYYMMDDHHmmss.microseconds+timezone)
+            const creationDateMatch = wmicResult.match(/CreationDate=([^\r\n]+)/);
+            if (creationDateMatch) {
+                const creationDateStr = creationDateMatch[1].trim();
+                const startTime = this.parseWindowsCreationDate(creationDateStr);
+                if (startTime) {
+                    context.startTime = startTime;
+                    // Calculate uptime
+                    context.uptime = Date.now() - startTime.getTime();
+                }
+            }
+            // Parse ParentProcessId
+            const parentPidMatch = wmicResult.match(/ParentProcessId=([^\r\n]+)/);
+            if (parentPidMatch) {
+                const parentPid = parseInt(parentPidMatch[1].trim());
+                if (!isNaN(parentPid) && parentPid > 0) {
+                    context.parentPid = parentPid;
+                    // Try to get parent process name
+                    try {
+                        const parentWmic = (0, child_process_1.execSync)(`wmic process where "ProcessId=${parentPid}" get Name /format:list`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] });
+                        const parentNameMatch = parentWmic.match(/Name=([^\r\n]+)/);
+                        if (parentNameMatch) {
+                            context.parentProcessName = parentNameMatch[1].trim();
+                        }
+                    }
+                    catch {
+                        // Ignore - parent name is optional
+                    }
+                }
+            }
+            // Parse ExecutablePath (working directory is the directory of the executable)
+            const executablePathMatch = wmicResult.match(/ExecutablePath=([^\r\n]+)/);
+            if (executablePathMatch) {
+                const executablePath = executablePathMatch[1].trim();
+                // Extract directory from path
+                const path = require('path');
+                context.workingDirectory = path.dirname(executablePath);
+            }
+        }
+        catch {
+            // Ignore errors - context info is optional
+        }
+        try {
+            // Check if managed by Windows Service
+            // Use sc query to find services, then match by PID
+            const scResult = (0, child_process_1.execSync)('sc query type= service state= all', { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] });
+            // This is a simplified check - Windows services are complex
+            // We'll check if the process name matches common service patterns
+            // A more accurate method would require WMI queries which are slower
+            const servicePatterns = [
+                /^svchost\.exe$/i,
+                /^services\.exe$/i,
+                /^spoolsv\.exe$/i,
+            ];
+            // Note: Full service detection on Windows requires more complex logic
+            // For now, we'll mark it if parent is services.exe (PID 4 or system)
+            if (context.parentPid === 4 || context.parentProcessName?.toLowerCase().includes('services')) {
+                context.serviceManager = 'windows-service';
+            }
+        }
+        catch {
+            // Ignore errors - service detection is optional
+        }
+        return context;
+    }
+    /**
+     * Parse Windows CreationDate format (YYYYMMDDHHmmss.microseconds+timezone) to Date
+     */
+    parseWindowsCreationDate(dateStr) {
+        try {
+            // Format: YYYYMMDDHHmmss.microseconds+timezone
+            // Example: 20251213103045.123456+060
+            // Extract: YYYYMMDDHHmmss
+            const datePart = dateStr.substring(0, 14);
+            if (datePart.length !== 14) {
+                return undefined;
+            }
+            const year = parseInt(datePart.substring(0, 4));
+            const month = parseInt(datePart.substring(4, 6)) - 1; // Month is 0-indexed
+            const day = parseInt(datePart.substring(6, 8));
+            const hour = parseInt(datePart.substring(8, 10));
+            const minute = parseInt(datePart.substring(10, 12));
+            const second = parseInt(datePart.substring(12, 14));
+            const date = new Date(year, month, day, hour, minute, second);
+            if (!isNaN(date.getTime())) {
+                return date;
+            }
+        }
+        catch {
+            // Ignore parse errors
+        }
+        return undefined;
     }
     /**
      * Sleep utility

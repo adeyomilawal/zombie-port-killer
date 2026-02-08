@@ -63,6 +63,7 @@ program
     .option("-p, --process <name>", "Filter by process name")
     .option("--project <name>", "Filter by project name")
     .option("--no-system", "Hide system processes")
+    .option("-v, --verbose", "Show detailed process context (uptime, parent process, working directory, service)")
     .action(async (options) => {
     try {
         await scanCommand.execute(options);
@@ -193,6 +194,9 @@ program.on("--help", () => {
     console.log("");
     console.log(chalk_1.default.gray("  # Hide system processes"));
     console.log("  $ zkill scan --no-system");
+    console.log("");
+    console.log(chalk_1.default.gray("  # Show detailed process context"));
+    console.log("  $ zkill scan --verbose");
     console.log("");
     console.log(chalk_1.default.gray("  # List port mappings"));
     console.log("  $ zkill list");

@@ -3,6 +3,11 @@
  */
 
 /**
+ * Service manager types
+ */
+export type ServiceManager = 'systemd' | 'launchd' | 'windows-service' | null;
+
+/**
  * Information about a process using a port
  */
 export interface ProcessInfo {
@@ -12,6 +17,13 @@ export interface ProcessInfo {
   command: string;
   user?: string;
   startTime?: Date;
+  // Process context fields (Epic 5.5)
+  uptime?: number; // Duration in milliseconds
+  parentPid?: number;
+  parentProcessName?: string;
+  serviceManager?: ServiceManager;
+  serviceName?: string;
+  workingDirectory?: string;
 }
 
 /**

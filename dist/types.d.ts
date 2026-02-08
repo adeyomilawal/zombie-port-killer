@@ -2,6 +2,10 @@
  * Core type definitions for Zombie Port Killer
  */
 /**
+ * Service manager types
+ */
+export type ServiceManager = 'systemd' | 'launchd' | 'windows-service' | null;
+/**
  * Information about a process using a port
  */
 export interface ProcessInfo {
@@ -11,6 +15,12 @@ export interface ProcessInfo {
     command: string;
     user?: string;
     startTime?: Date;
+    uptime?: number;
+    parentPid?: number;
+    parentProcessName?: string;
+    serviceManager?: ServiceManager;
+    serviceName?: string;
+    workingDirectory?: string;
 }
 /**
  * Mapping between a port and a project

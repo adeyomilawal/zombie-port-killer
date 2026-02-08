@@ -35,7 +35,7 @@ class ScanCommand {
         const sorted = processes.sort((a, b) => a.port - b.port);
         // Display each process
         for (const process of sorted) {
-            this.displayProcess(process);
+            this.displayProcess(process, options.verbose || false);
         }
         console.log(""); // Empty line at the end
     }
@@ -131,7 +131,7 @@ class ScanCommand {
     /**
      * Display process information
      */
-    displayProcess(process) {
+    displayProcess(process, verbose = false) {
         const mapping = this.storageService.getPortMapping(process.port);
         const projectInfo = mapping ? chalk_1.default.gray(` (${mapping.projectName})`) : "";
         console.log(chalk_1.default.cyan(`Port ${chalk_1.default.bold(process.port)}`) +
@@ -143,7 +143,78 @@ class ScanCommand {
         if (process.user) {
             console.log(chalk_1.default.gray(`     User: ${process.user}`));
         }
+        // Show verbose context if requested
+        if (verbose) {
+            this.displayProcessContext(process);
+        }
         console.log(""); // Empty line between processes
+    }
+    /**
+     * Display detailed process context information
+     */
+    displayProcessContext(process) {
+        // Uptime / Start time
+        if (process.uptime !== undefined || process.startTime) {
+            let uptimeStr = "";
+            if (process.uptime !== undefined && process.uptime > 0) {
+                uptimeStr = this.formatUptime(process.uptime);
+            }
+            if (process.startTime) {
+                const startTimeStr = process.startTime.toLocaleString();
+                if (uptimeStr) {
+                    console.log(chalk_1.default.gray(`     Running for: ${uptimeStr} (started: ${startTimeStr})`));
+                }
+                else {
+                    console.log(chalk_1.default.gray(`     Started: ${startTimeStr}`));
+                }
+            }
+            else if (uptimeStr) {
+                console.log(chalk_1.default.gray(`     Running for: ${uptimeStr}`));
+            }
+        }
+        // Parent process
+        if (process.parentPid !== undefined) {
+            const parentInfo = process.parentProcessName
+                ? `${process.parentProcessName} (PID ${process.parentPid})`
+                : `PID ${process.parentPid}`;
+            console.log(chalk_1.default.gray(`     Started by: ${parentInfo}`));
+        }
+        // Working directory
+        if (process.workingDirectory) {
+            console.log(chalk_1.default.gray(`     Working dir: ${process.workingDirectory}`));
+        }
+        // Service manager
+        if (process.serviceManager) {
+            const serviceInfo = process.serviceName
+                ? `${process.serviceName} (${process.serviceManager})`
+                : process.serviceManager;
+            console.log(chalk_1.default.gray(`     Service: ${serviceInfo}`));
+        }
+        else if (process.parentPid === 1) {
+            // Common indicator of system service
+            console.log(chalk_1.default.gray(`     Service: Not a service`));
+        }
+    }
+    /**
+     * Format uptime in milliseconds to human-readable string
+     */
+    formatUptime(ms) {
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        if (days > 0) {
+            return `${days}d ${hours % 24}h ${minutes % 60}m`;
+        }
+        else if (hours > 0) {
+            return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
+        }
+        else if (minutes > 0) {
+            return `${minutes}m ${seconds % 60}s`;
+        }
+        else {
+            return `${seconds}s`;
+        }
     }
     /**
      * Truncate string if too long

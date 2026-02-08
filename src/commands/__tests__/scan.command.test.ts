@@ -218,6 +218,109 @@ describe('ScanCommand', () => {
       );
     });
 
+    it('should display verbose context when verbose option is true', async () => {
+      const processWithContext: ProcessInfo = {
+        pid: 1234,
+        port: 3000,
+        processName: 'node',
+        command: 'node server.js',
+        user: 'testuser',
+        uptime: 2 * 60 * 60 * 1000 + 15 * 60 * 1000, // 2h 15m
+        startTime: new Date('2025-12-13T10:30:00'),
+        parentPid: 5678,
+        parentProcessName: 'node',
+        workingDirectory: '/Users/test/my-app',
+        serviceManager: null,
+      };
+
+      mockProcessService.getAllPorts.mockResolvedValue([processWithContext]);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({ verbose: true });
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('Running for:')
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('Started by:')
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('Working dir:')
+      );
+    });
+
+    it('should not display verbose context when verbose option is false', async () => {
+      const processWithContext: ProcessInfo = {
+        pid: 1234,
+        port: 3000,
+        processName: 'node',
+        command: 'node server.js',
+        user: 'testuser',
+        uptime: 2 * 60 * 60 * 1000,
+        parentPid: 5678,
+        workingDirectory: '/Users/test/my-app',
+      };
+
+      mockProcessService.getAllPorts.mockResolvedValue([processWithContext]);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({ verbose: false });
+
+      expect(console.log).not.toHaveBeenCalledWith(
+        expect.stringContaining('Running for:')
+      );
+      expect(console.log).not.toHaveBeenCalledWith(
+        expect.stringContaining('Working dir:')
+      );
+    });
+
+    it('should display service manager information when available', async () => {
+      const processWithService: ProcessInfo = {
+        pid: 1234,
+        port: 3000,
+        processName: 'nginx',
+        command: 'nginx -g daemon off;',
+        user: 'www-data',
+        serviceManager: 'systemd',
+        serviceName: 'nginx.service',
+      };
+
+      mockProcessService.getAllPorts.mockResolvedValue([processWithService]);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({ verbose: true });
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('Service:')
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('nginx.service')
+      );
+    });
+
+    it('should format uptime correctly for different durations', async () => {
+      const processWithUptime: ProcessInfo = {
+        pid: 1234,
+        port: 3000,
+        processName: 'node',
+        command: 'node server.js',
+        user: 'testuser',
+        uptime: 2 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000 + 30 * 60 * 1000, // 2d 5h 30m
+      };
+
+      mockProcessService.getAllPorts.mockResolvedValue([processWithUptime]);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({ verbose: true });
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('Running for:')
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('2d')
+      );
+    });
+
     it('should throw error for invalid port range format', async () => {
       mockProcessService.getAllPorts.mockResolvedValue(mockProcesses);
 

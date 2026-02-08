@@ -21,6 +21,14 @@ export declare class WindowsAdapter implements PlatformAdapter {
      */
     private getProcessDetails;
     /**
+     * Get process context information (uptime, parent process, service manager, working directory)
+     */
+    private getProcessContext;
+    /**
+     * Parse Windows CreationDate format (YYYYMMDDHHmmss.microseconds+timezone) to Date
+     */
+    private parseWindowsCreationDate;
+    /**
      * Sleep utility
      */
     private sleep;

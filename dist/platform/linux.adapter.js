@@ -198,17 +198,166 @@ class LinuxAdapter {
             const processName = parts[0];
             const user = parts[parts.length - 1];
             const command = parts.slice(1, parts.length - 1).join(' ');
+            // Gather additional context information
+            const context = this.getProcessContext(pid);
             return {
                 pid,
                 port,
                 processName,
                 command,
                 user,
+                ...context,
             };
         }
         catch (error) {
             return null;
         }
+    }
+    /**
+     * Get process context information (uptime, parent process, service manager, working directory)
+     */
+    getProcessContext(pid) {
+        const context = {};
+        try {
+            // Get uptime (etime) and start time (lstart) in one call
+            const timeResult = (0, child_process_1.execSync)(`ps -p ${pid} -o etime=,lstart=`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+            if (timeResult) {
+                const parts = timeResult.split(/\s+/);
+                if (parts.length >= 2) {
+                    // Parse elapsed time (format: DD-HH:MM:SS or HH:MM:SS or MM:SS)
+                    const etime = parts[0];
+                    context.uptime = this.parseElapsedTime(etime);
+                    // Parse start time (format: Mon DD HH:MM:SS YYYY)
+                    const lstart = parts.slice(1).join(' ');
+                    context.startTime = this.parseStartTime(lstart);
+                }
+            }
+        }
+        catch {
+            // Ignore errors - uptime/startTime are optional
+        }
+        try {
+            // Get parent PID and parent process name
+            const parentResult = (0, child_process_1.execSync)(`ps -p ${pid} -o ppid=,ppidcmd=`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+            if (parentResult) {
+                const parts = parentResult.split(/\s+/);
+                if (parts.length >= 1) {
+                    const ppid = parseInt(parts[0]);
+                    if (!isNaN(ppid) && ppid > 0) {
+                        context.parentPid = ppid;
+                        if (parts.length > 1) {
+                            context.parentProcessName = parts.slice(1).join(' ');
+                        }
+                    }
+                }
+            }
+        }
+        catch {
+            // Ignore errors - parent info is optional
+        }
+        try {
+            // Get working directory
+            const cwdResult = (0, child_process_1.execSync)(`ps -p ${pid} -o cwd=`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+            if (cwdResult) {
+                context.workingDirectory = cwdResult;
+            }
+        }
+        catch {
+            // Ignore errors - working directory is optional
+        }
+        try {
+            // Check if managed by systemd
+            // Method 1: Check /proc/$PID/cgroup for systemd
+            try {
+                const cgroup = (0, child_process_1.execSync)(`cat /proc/${pid}/cgroup 2>/dev/null`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+                if (cgroup.includes('systemd')) {
+                    context.serviceManager = 'systemd';
+                    // Try to get service name from systemctl
+                    try {
+                        const systemctlResult = (0, child_process_1.execSync)(`systemctl status ${pid} 2>/dev/null | head -1`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+                        // Extract service name (format: ● service-name.service)
+                        const serviceMatch = systemctlResult.match(/(\S+\.service)/);
+                        if (serviceMatch) {
+                            context.serviceName = serviceMatch[1];
+                        }
+                    }
+                    catch {
+                        // Ignore - service name is optional
+                    }
+                }
+            }
+            catch {
+                // Ignore - cgroup check failed
+            }
+            // Method 2: Check if parent is systemd (PID 1)
+            if (context.parentPid === 1) {
+                // Could be a systemd service, but not definitive
+                // We'll only set it if we found systemd in cgroup
+            }
+        }
+        catch {
+            // Ignore errors - service detection is optional
+        }
+        return context;
+    }
+    /**
+     * Parse elapsed time string (DD-HH:MM:SS, HH:MM:SS, or MM:SS) to milliseconds
+     */
+    parseElapsedTime(etime) {
+        try {
+            // Format: DD-HH:MM:SS or HH:MM:SS or MM:SS
+            let days = 0;
+            let hours = 0;
+            let minutes = 0;
+            let seconds = 0;
+            if (etime.includes('-')) {
+                // Format: DD-HH:MM:SS
+                const [daysPart, timePart] = etime.split('-');
+                days = parseInt(daysPart) || 0;
+                const [h, m, s] = timePart.split(':').map(Number);
+                hours = h || 0;
+                minutes = m || 0;
+                seconds = s || 0;
+            }
+            else {
+                // Format: HH:MM:SS or MM:SS
+                const parts = etime.split(':');
+                if (parts.length === 3) {
+                    // HH:MM:SS
+                    hours = parseInt(parts[0]) || 0;
+                    minutes = parseInt(parts[1]) || 0;
+                    seconds = parseInt(parts[2]) || 0;
+                }
+                else if (parts.length === 2) {
+                    // MM:SS
+                    minutes = parseInt(parts[0]) || 0;
+                    seconds = parseInt(parts[1]) || 0;
+                }
+            }
+            return (days * 24 * 60 * 60 * 1000 +
+                hours * 60 * 60 * 1000 +
+                minutes * 60 * 1000 +
+                seconds * 1000);
+        }
+        catch {
+            return 0;
+        }
+    }
+    /**
+     * Parse start time string (Mon DD HH:MM:SS YYYY) to Date
+     */
+    parseStartTime(lstart) {
+        try {
+            // Format: Mon DD HH:MM:SS YYYY (e.g., "Dec 13 10:30:45 2025")
+            const date = new Date(lstart);
+            if (!isNaN(date.getTime())) {
+                return date;
+            }
+        }
+        catch {
+            // Ignore parse errors
+        }
+        return undefined;
     }
     /**
      * Check if ss command is available

@@ -9,6 +9,7 @@ export interface ScanOptions {
     process?: string;
     project?: string;
     system?: boolean;
+    verbose?: boolean;
 }
 export declare class ScanCommand {
     private processService;
@@ -38,6 +39,14 @@ export declare class ScanCommand {
      * Display process information
      */
     private displayProcess;
+    /**
+     * Display detailed process context information
+     */
+    private displayProcessContext;
+    /**
+     * Format uptime in milliseconds to human-readable string
+     */
+    private formatUptime;
     /**
      * Truncate string if too long
      */
