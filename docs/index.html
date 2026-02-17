@@ -552,12 +552,12 @@
           >
             <div class="flex items-center gap-3 mb-4">
               <span class="text-2xl">🎉</span>
-              <h2 class="text-2xl font-bold">Latest Features</h2>
+              <h2 class="text-2xl font-bold">What's New in v1.2.0</h2>
             </div>
             <p class="mb-4 opacity-90">
-              Powerful port scanning filters and intelligent project awareness!
+              Process Context & Why It's Running - See exactly what's happening with your processes!
             </p>
-            <div class="grid md:grid-cols-2 gap-4 text-sm mb-4">
+            <div class="grid md:grid-cols-3 gap-4 text-sm mb-4">
               <div class="bg-white bg-opacity-10 rounded p-3">
                 <div class="font-semibold mb-1">🔍 Smart Scanning Filters</div>
                 <div class="space-y-1 text-xs opacity-90">
@@ -578,10 +578,20 @@
                   <div>Filter scans by project name</div>
                 </div>
               </div>
+              <div class="bg-white bg-opacity-10 rounded p-3">
+                <div class="font-semibold mb-1">🔬 Process Context (NEW!)</div>
+                <div class="space-y-1 text-xs opacity-90">
+                  <div><code>zkill scan --verbose</code></div>
+                  <div>See uptime & running time</div>
+                  <div>View parent process info</div>
+                  <div>Check working directory</div>
+                  <div>Identify service managers</div>
+                </div>
+              </div>
             </div>
             <p class="mt-4 text-sm opacity-75">
               Perfect for microservices developers managing multiple projects
-              and ports!
+              and ports! Now with detailed process context to understand why things are running.
             </p>
           </div>
         </div>
@@ -694,6 +704,19 @@
               processes. Perfect for microservices.
             </p>
           </div>
+
+          <!-- Feature 8 -->
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-lg border border-gray-100"
+          >
+            <div class="text-4xl mb-4">🔬</div>
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">
+              Process Context
+            </h3>
+            <p class="text-gray-600">
+              See why processes are running with detailed context: uptime, parent process, working directory, and service manager info. Use <code class="bg-gray-100 px-2 py-1 rounded">--verbose</code> to understand what's happening.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -795,12 +818,21 @@
 
               <div>
                 <h4 class="font-semibold text-gray-700 mb-2">
+                  Show detailed process context (uptime, parent, working directory):
+                </h4>
+                <div class="bg-gray-900 text-white p-4 rounded-lg">
+                  <code class="text-green-400">zkill scan --verbose</code>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold text-gray-700 mb-2">
                   Combine filters (perfect for microservices):
                 </h4>
                 <div class="bg-gray-900 text-white p-4 rounded-lg">
                   <code class="text-green-400"
                     >zkill scan --range 3000-9000 --process node
-                    --no-system</code
+                    --no-system --verbose</code
                   >
                 </div>
               </div>
@@ -1174,12 +1206,11 @@
                 </li>
               </ul>
               <p class="mt-3">
-                <strong>New in v1.1.1:</strong> You can now filter ports when
-                scanning! Use
+                <strong>New in v1.2.0:</strong> Use
                 <code class="bg-gray-100 px-2 py-1 rounded"
-                  >zkill scan --range 3000-9000</code
+                  >zkill scan --verbose</code
                 >
-                to focus on specific port ranges.
+                to see detailed process context including uptime, parent process, working directory, and service manager information.
               </p>
               <p class="mt-3">
                 For now, run zkill multiple times for multiple ports.
