@@ -1,6 +1,6 @@
 {
   "name": "zombie-port-killer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Kill zombie processes blocking your ports - instantly",
   "main": "dist/cli.js",
   "repository": {
