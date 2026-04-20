@@ -170,19 +170,33 @@ This release adds intelligent project detection and port-to-project mapping, mak
 
 ---
 
+## [1.3.0] - 2026-04-13
+
+### Added
+
+- **Multi-port kill** — Clear several ports in one run: `zkill 3000 8000 5432` (duplicates ignored). Works with `--force`.
+- **`zkill scan --json`** — Single JSON object on stdout with `schemaVersion: "1"`, `meta` (tool version, OS), `filters`, `count`, and `processes[]`. Combine with `--verbose` for per-process `context` (uptime, parent, cwd, service). Intended for **jq**, scripts, and CI.
+- **Runtime contract helpers** — `scanJsonV1ValidationErrors` / `isValidScanJsonV1` in the codebase for tests and future tooling.
+
+### Changed
+
+- **Release & coverage CI** — Build runs before tests so integration tests against `dist/cli.js` match the current source.
+- **Public site** (`docs/index.html`) — Documents multi-port, JSON scan, and updates the FAQ.
+
+### Notes
+
+- JSON consumers should key off `schemaVersion`; breaking JSON shape changes will bump that string.
+
+---
+
 ## [Unreleased]
 
-### Planned for v1.2
+### Planned
 
-- Kill multiple ports in one command: `zkill 3000 8000 5432`
 - Kill by process name: `zkill --name node`
-- JSON output mode: `zkill scan --json`
 - Homebrew distribution (macOS)
 - APT/YUM distribution (Linux)
 - Chocolatey distribution (Windows)
-
-### Planned for v1.3
-
 - VSCode extension
 - Shell completions (bash, zsh, fish)
 - Docker container integration
@@ -226,6 +240,7 @@ Thanks for trying zkill! We'd love to hear what you think.
 
 ---
 
+[1.3.0]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.3.0
 [1.1.2]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.1.2
 [1.1.0]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.1.0
 [1.0.0]: https://github.com/adeyomilawal/zombie-port-killer/releases/tag/v1.0.0

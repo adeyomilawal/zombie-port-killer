@@ -1,0 +1,1 @@
+{"version":3,"file":"parse-kill-ports.d.ts","sourceRoot":"","sources":["../src/parse-kill-ports.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,MAAM,MAAM,oBAAoB,GAC5B;IAAE,EAAE,EAAE,IAAI,CAAC;IAAC,KAAK,EAAE,MAAM,EAAE,CAAA;CAAE,GAC7B;IAAE,EAAE,EAAE,KAAK,CAAC;IAAC,YAAY,EAAE,MAAM,CAAA;CAAE,CAAC;AAExC,wBAAgB,mBAAmB,CAAC,GAAG,EAAE,MAAM,EAAE,GAAG,oBAAoB,CAmBvE"}

@@ -3,7 +3,7 @@
  * Tests the actual CLI execution end-to-end
  */
 
-import { execSync } from "child_process";
+import { execSync, spawnSync } from "child_process";
 import { ProcessService } from "../../services/process.service";
 import { StorageService } from "../../services/storage.service";
 import path from "path";
@@ -87,6 +87,38 @@ describe("Kill Command Integration", () => {
       } catch (error: any) {
         expect(error.status).toBe(1);
       }
+    });
+
+    it("should reject multi-port args if any token is invalid", () => {
+      const cliPath = path.join(__dirname, "../../../dist/cli.js");
+
+      try {
+        execSync(`node "${cliPath}" 3000 not-a-port`, { stdio: "pipe" });
+        fail("Should have thrown an error");
+      } catch (error: any) {
+        expect(error.status).toBe(1);
+      }
+    });
+
+    it("should run kill flow for each port when multiple unused ports are given", async () => {
+      const cliPath = path.join(__dirname, "../../../dist/cli.js");
+      let portA = await findAvailablePort();
+      let portB = await findAvailablePort();
+      let guard = 0;
+      while (portB === portA && guard++ < 20) {
+        portB = await findAvailablePort();
+      }
+
+      const r = spawnSync(
+        process.execPath,
+        [cliPath, String(portA), String(portB), "--force"],
+        { encoding: "utf-8" }
+      );
+      const output = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+
+      expect(r.status).toBe(0);
+      const matches = output.match(/not in use|not found/gi) ?? [];
+      expect(matches.length).toBeGreaterThanOrEqual(2);
     });
 
     it("should handle non-existent ports gracefully", async () => {

@@ -10,6 +10,7 @@ export interface ScanOptions {
     project?: string;
     system?: boolean;
     verbose?: boolean;
+    json?: boolean;
 }
 export declare class ScanCommand {
     private processService;

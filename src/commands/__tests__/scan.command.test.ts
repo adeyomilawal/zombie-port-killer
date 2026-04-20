@@ -6,6 +6,11 @@ import { ScanCommand, ScanOptions } from '../scan.command';
 import { ProcessService } from '../../services/process.service';
 import { StorageService } from '../../services/storage.service';
 import { ProcessInfo } from '../../types';
+import {
+  SCAN_JSON_SCHEMA_VERSION,
+  isValidScanJsonV1,
+  scanJsonV1ValidationErrors,
+} from '../../scan-json-schema';
 
 // Mock dependencies
 jest.mock('../../services/process.service');
@@ -76,6 +81,20 @@ describe('ScanCommand', () => {
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining('Active Ports (3 found)')
       );
+    });
+
+    it('should not emit v1 JSON on console when json option is omitted', async () => {
+      mockProcessService.getAllPorts.mockResolvedValue(mockProcesses);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({});
+
+      const rawJsonLines = (console.log as jest.Mock).mock.calls.filter(
+        (c) =>
+          typeof c[0] === 'string' &&
+          c[0].trimStart().startsWith('{"schemaVersion"')
+      );
+      expect(rawJsonLines.length).toBe(0);
     });
 
     it('should show message when no ports are in use', async () => {
@@ -351,6 +370,91 @@ describe('ScanCommand', () => {
       await expect(
         scanCommand.execute({ range: '1000-70000' })
       ).rejects.toThrow('Invalid port range');
+    });
+
+    it('should print versioned JSON when json option is true', async () => {
+      mockProcessService.getAllPorts.mockResolvedValue([mockProcesses[0]]);
+      mockProcessService.isCriticalProcess.mockReturnValue(false);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({ json: true });
+
+      expect(mockProcessService.getAllPorts).toHaveBeenCalled();
+      const jsonCall = (console.log as jest.Mock).mock.calls.find(
+        (c) => typeof c[0] === 'string' && c[0].startsWith('{')
+      );
+      expect(jsonCall).toBeDefined();
+      const doc = JSON.parse(jsonCall![0] as string);
+      expect(scanJsonV1ValidationErrors(doc)).toEqual([]);
+      expect(isValidScanJsonV1(doc)).toBe(true);
+      expect(doc.schemaVersion).toBe(SCAN_JSON_SCHEMA_VERSION);
+      expect(doc.meta.zkillVersion).toMatch(/\d+\.\d+\.\d+/);
+      expect(doc.meta.platform).toBeTruthy();
+      expect(doc.count).toBe(1);
+      expect(doc.processes).toHaveLength(1);
+      expect(doc.processes[0].port).toBe(3000);
+      expect(doc.processes[0].context).toBeNull();
+      expect(doc.filters.hideSystemProcesses).toBe(false);
+    });
+
+    it('should emit JSON with count zero when no ports match', async () => {
+      mockProcessService.getAllPorts.mockResolvedValue([]);
+
+      await scanCommand.execute({ json: true });
+
+      const jsonCall = (console.log as jest.Mock).mock.calls.find(
+        (c) => typeof c[0] === 'string' && c[0].startsWith('{')
+      );
+      expect(jsonCall).toBeDefined();
+      const doc = JSON.parse(jsonCall![0] as string);
+      expect(scanJsonV1ValidationErrors(doc)).toEqual([]);
+      expect(isValidScanJsonV1(doc)).toBe(true);
+      expect(doc.count).toBe(0);
+      expect(doc.processes).toEqual([]);
+    });
+
+    it('should not use human headings when json is true', async () => {
+      mockProcessService.getAllPorts.mockResolvedValue(mockProcesses);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({ json: true });
+
+      expect(console.log).not.toHaveBeenCalledWith(
+        expect.stringContaining('Active Ports')
+      );
+    });
+
+    it('should include context in JSON when verbose and json are true', async () => {
+      const processWithContext: ProcessInfo = {
+        pid: 1234,
+        port: 3000,
+        processName: 'node',
+        command: 'node server.js',
+        user: 'testuser',
+        uptime: 1000,
+        startTime: new Date('2026-03-01T00:00:00.000Z'),
+        parentPid: 1,
+        parentProcessName: 'launchd',
+        workingDirectory: '/tmp',
+        serviceManager: null,
+      };
+      mockProcessService.getAllPorts.mockResolvedValue([processWithContext]);
+      mockProcessService.isCriticalProcess.mockReturnValue(false);
+      mockStorageService.getPortMapping.mockReturnValue(null);
+
+      await scanCommand.execute({ json: true, verbose: true });
+
+      const jsonCall = (console.log as jest.Mock).mock.calls.find(
+        (c) => typeof c[0] === 'string' && c[0].startsWith('{')
+      );
+      const doc = JSON.parse(jsonCall![0] as string);
+      expect(scanJsonV1ValidationErrors(doc)).toEqual([]);
+      expect(isValidScanJsonV1(doc)).toBe(true);
+      expect(doc.processes[0].context).not.toBeNull();
+      expect(doc.processes[0].context.uptimeMs).toBe(1000);
+      expect(doc.processes[0].context.startTime).toBe(
+        '2026-03-01T00:00:00.000Z'
+      );
     });
   });
 

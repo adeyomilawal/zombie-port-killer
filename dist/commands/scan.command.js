@@ -8,8 +8,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScanCommand = void 0;
+const os_1 = __importDefault(require("os"));
 const chalk_1 = __importDefault(require("chalk"));
 const ora_1 = __importDefault(require("ora"));
+const package_json_1 = __importDefault(require("../../package.json"));
+const scan_json_schema_1 = require("../scan-json-schema");
 class ScanCommand {
     constructor(processService, storageService) {
         this.processService = processService;
@@ -19,21 +22,41 @@ class ScanCommand {
      * Execute scan command - list all ports in use
      */
     async execute(options = {}) {
-        const spinner = (0, ora_1.default)("Scanning for active ports...").start();
+        const useJson = options.json === true;
+        const spinner = useJson
+            ? null
+            : (0, ora_1.default)("Scanning for active ports...").start();
         let processes = await this.processService.getAllPorts();
-        spinner.stop();
+        spinner?.stop();
         // Apply filters
         processes = this.applyFilters(processes, options);
-        if (processes.length === 0) {
+        // Sort by port number (human output and JSON use the same ordering)
+        const sorted = processes.sort((a, b) => a.port - b.port);
+        if (useJson) {
+            const doc = (0, scan_json_schema_1.buildScanJsonDocument)({
+                processes: sorted,
+                verbose: options.verbose === true,
+                zkillVersion: package_json_1.default.version,
+                platform: os_1.default.platform(),
+                filters: {
+                    range: options.range,
+                    process: options.process,
+                    project: options.project,
+                    hideSystemProcesses: options.system === false,
+                },
+                isCriticalProcess: (p) => this.processService.isCriticalProcess(p),
+                getPortMapping: (port) => this.storageService.getPortMapping(port),
+            });
+            console.log(JSON.stringify(doc));
+            return;
+        }
+        if (sorted.length === 0) {
             console.log(chalk_1.default.yellow("\nNo ports currently in use matching your filters."));
             return;
         }
         // Show active filters
         this.showActiveFilters(options);
-        console.log(chalk_1.default.bold(`\n📊 Active Ports (${processes.length} found):\n`));
-        // Sort by port number
-        const sorted = processes.sort((a, b) => a.port - b.port);
-        // Display each process
+        console.log(chalk_1.default.bold(`\n📊 Active Ports (${sorted.length} found):\n`));
         for (const process of sorted) {
             this.displayProcess(process, options.verbose || false);
         }

@@ -13,6 +13,7 @@ import { AutoCommand } from "./commands/auto.command";
 import { ProcessService } from "./services/process.service";
 import { StorageService } from "./services/storage.service";
 import { ProjectService } from "./services/project.service";
+import { parseKillPortTokens } from "./parse-kill-ports";
 
 // Initialize services
 const processService = new ProcessService();
@@ -43,27 +44,40 @@ program
   .description("Kill zombie processes blocking your ports")
   .version(packageJson.version);
 
-// Main command: zkill <port>
+// Main command: zkill <ports...>
 program
-  .argument("[port]", "Port number to check and kill")
+  .argument(
+    "[ports...]",
+    "One or more port numbers to check and kill (e.g. 3000 or 3000 8000 5432)"
+  )
   .option("-f, --force", "Force kill without confirmation")
-  .action(async (port: string | undefined, options) => {
+  .action(async (ports: string[] | string | undefined, options) => {
     try {
-      // If no port provided, show help
-      if (!port) {
+      const raw =
+        ports == null ? [] : Array.isArray(ports) ? ports : [ports];
+      if (raw.length === 0) {
         program.help();
         return;
       }
 
-      const portNum = parseInt(port);
-
-      if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
+      const parsed = parseKillPortTokens(raw);
+      if (!parsed.ok) {
         console.error(chalk.red("❌ Error: Invalid port number"));
-        console.error(chalk.gray("Port must be a number between 1 and 65535"));
+        console.error(
+          chalk.gray(
+            `Port must be a number between 1 and 65535 (got "${parsed.invalidToken}")`
+          )
+        );
         process.exit(1);
       }
 
-      await killCommand.execute(portNum, options.force);
+      const portNums = parsed.ports;
+      for (let i = 0; i < portNums.length; i++) {
+        if (portNums.length > 1 && i > 0) {
+          console.log(chalk.gray("\n" + "—".repeat(48) + "\n"));
+        }
+        await killCommand.execute(portNums[i], options.force);
+      }
     } catch (error) {
       handleError(error);
     }
@@ -78,6 +92,10 @@ program
   .option("--project <name>", "Filter by project name")
   .option("--no-system", "Hide system processes")
   .option("-v, --verbose", "Show detailed process context (uptime, parent process, working directory, service)")
+  .option(
+    "--json",
+    "Print scan results as JSON (stable schema for scripts and CI; use with jq)"
+  )
   .action(async (options) => {
     try {
       await scanCommand.execute(options);
@@ -218,6 +236,9 @@ program.on("--help", () => {
   console.log(chalk.gray("  # Kill process on port 3000"));
   console.log("  $ zkill 3000");
   console.log("");
+  console.log(chalk.gray("  # Kill processes on several ports"));
+  console.log("  $ zkill 3000 8000 5432");
+  console.log("");
   console.log(chalk.gray("  # Kill without confirmation"));
   console.log("  $ zkill 3000 --force");
   console.log("");
@@ -230,12 +251,15 @@ program.on("--help", () => {
   console.log(chalk.gray("  # Filter by process name"));
   console.log("  $ zkill scan --process node");
   console.log("");
-    console.log(chalk.gray("  # Hide system processes"));
-    console.log("  $ zkill scan --no-system");
-    console.log("");
-    console.log(chalk.gray("  # Show detailed process context"));
-    console.log("  $ zkill scan --verbose");
-    console.log("");
+  console.log(chalk.gray("  # Hide system processes"));
+  console.log("  $ zkill scan --no-system");
+  console.log("");
+  console.log(chalk.gray("  # Show detailed process context"));
+  console.log("  $ zkill scan --verbose");
+  console.log("");
+  console.log(chalk.gray("  # Machine-readable scan (scripts / jq)"));
+  console.log("  $ zkill scan --json");
+  console.log("");
   console.log(chalk.gray("  # List port mappings"));
   console.log("  $ zkill list");
   console.log("");

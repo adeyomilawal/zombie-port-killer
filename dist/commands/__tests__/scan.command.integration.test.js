@@ -12,6 +12,7 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const os_1 = __importDefault(require("os"));
 const net_1 = __importDefault(require("net"));
+const scan_json_schema_1 = require("../../scan-json-schema");
 describe("Scan Command Integration", () => {
     let testConfigPath;
     let server = null;
@@ -68,6 +69,55 @@ describe("Scan Command Integration", () => {
             });
             // Should indicate no ports or show some ports
             expect(output.length).toBeGreaterThan(0);
+        });
+        it("should emit parseable JSON with schemaVersion 1 for scan --json", () => {
+            const cliPath = path_1.default.join(__dirname, "../../../dist/cli.js");
+            const r = (0, child_process_1.spawnSync)(process.execPath, [cliPath, "scan", "--json"], { encoding: "utf-8" });
+            expect(r.status).toBe(0);
+            const jsonLine = (r.stdout || "")
+                .trim()
+                .split("\n")
+                .find((l) => l.startsWith("{")) ?? "";
+            const doc = JSON.parse(jsonLine);
+            expect(doc.schemaVersion).toBe("1");
+            expect(doc.meta.zkillVersion).toMatch(/^\d+\.\d+\.\d+/);
+            expect(["darwin", "linux", "win32"]).toContain(doc.meta.platform);
+            expect(typeof doc.filters.hideSystemProcesses).toBe("boolean");
+            expect(doc.count).toBe(doc.processes.length);
+            expect((0, scan_json_schema_1.scanJsonV1ValidationErrors)(doc)).toEqual([]);
+            expect((0, scan_json_schema_1.isValidScanJsonV1)(doc)).toBe(true);
+        });
+        it("scan --json --no-system sets hideSystemProcesses true in payload", () => {
+            const cliPath = path_1.default.join(__dirname, "../../../dist/cli.js");
+            const r = (0, child_process_1.spawnSync)(process.execPath, [cliPath, "scan", "--json", "--no-system"], {
+                encoding: "utf-8",
+            });
+            expect(r.status).toBe(0);
+            const jsonLine = (r.stdout || "")
+                .trim()
+                .split("\n")
+                .find((l) => l.startsWith("{")) ?? "";
+            const doc = JSON.parse(jsonLine);
+            expect(doc.filters.hideSystemProcesses).toBe(true);
+            expect((0, scan_json_schema_1.isValidScanJsonV1)(doc)).toBe(true);
+        });
+        it("scan --json with invalid --range exits with error and does not emit valid v1 JSON on stdout", () => {
+            const cliPath = path_1.default.join(__dirname, "../../../dist/cli.js");
+            const r = (0, child_process_1.spawnSync)(process.execPath, [cliPath, "scan", "--json", "--range", "not-a-range"], { encoding: "utf-8" });
+            expect(r.status).not.toBe(0);
+            const jsonLine = (r.stdout || "")
+                .trim()
+                .split("\n")
+                .find((l) => l.startsWith("{")) ?? "";
+            if (jsonLine) {
+                try {
+                    const parsed = JSON.parse(jsonLine);
+                    expect((0, scan_json_schema_1.isValidScanJsonV1)(parsed)).toBe(false);
+                }
+                catch {
+                    // non-JSON stdout is fine
+                }
+            }
         });
     });
     describe("zkill list", () => {
